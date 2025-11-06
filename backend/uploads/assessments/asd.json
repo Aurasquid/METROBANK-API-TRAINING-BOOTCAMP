@@ -1,0 +1,23 @@
+{
+  "id": 1762096004859,
+  "title": "asd",
+  "difficulty": "Beginner",
+  "courseId": 1762095669975,
+  "lessonId": 1762095810834,
+  "duration": "00:00",
+  "deadline": null,
+  "questions": [
+    {
+      "id": 1762096004873,
+      "questionNumber": 1,
+      "questionType": "mcq",
+      "question": "",
+      "options": [],
+      "answer": "",
+      "answerText": null,
+      "answerCode": null,
+      "points": 0
+    }
+  ],
+  "createdAt": "2025-11-02T15:06:44.859Z"
+}

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Courses - Trainee Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="dashboard.css" />
+
+    <style>
+        .courses-container {
+            width: 100%;
+            margin: 2rem auto;
+            padding: 2.2rem 1.4rem;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 3px 16px rgba(79, 82, 186, 0.09);
+        }
+
+        .courses-header {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 2.2rem;
+            color: #292d5c;
+        }
+
+        .course-section-title {
+            font-size: 1.06rem;
+            font-weight: 700;
+            margin-bottom: 0.5em;
+            color: #4651a1;
+        }
+
+        .lesson,
+        .assessment {
+            padding: 0.3em 0.4em;
+            font-size: 0.99rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6em;
+            color: #232864;
+            margin-bottom: 0.4em;
+            cursor: pointer;
+        }
+
+        .lesson-status,
+        .assessment-status {
+            font-size: 1.13em;
+        }
+
+        .complete {
+            color: #2db373;
+        }
+
+        .locked {
+            color: #bfb9ca;
+            cursor: not-allowed;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        @media (max-width: 800px) {
+            .courses-container {
+                padding: 1.1rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>Training</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4>
+                <span>Main Menu</span>
+                <div class="menu-separator"></div>
+            </h4>
+            <li>
+                <a href="dashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a>
+            </li>
+            <li>
+                <a href="trainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a>
+            </li>
+            <li>
+                <a href="notifications.html"><span class="material-symbols-outlined">notifications_active</span>Notifications</a>
+            </li>
+            <h4>
+                <span><b>Training Materials</b></span>
+                <div class="menu-separator"></div>
+            </h4>
+            <li>
+                <a href="courses.html"><span class="material-symbols-outlined">school</span>Courses</a>
+            </li>
+            <li>
+                <a href="assessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a>
+            </li>
+            <h4>
+                <span>Account</span>
+                <div class="menu-separator"></div>
+            </h4>
+            <li>
+                <a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a>
+            </li>
+            <li>
+                <a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a>
+            </li>
+        </ul>
+        <div class="user-account">
+            <div class="user-profile">
+                <img src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3>Eva Murphy</h3>
+                    <span>SME</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <div class="main">
+        <!-- Top Bar Header Section -->
+        <header class="top-header">
+            <div class="header-title">Dashboard</div>
+            <form class="header-search" action="#" autocomplete="off">
+                <input type="search" placeholder="Search..." name="search">
+                <span class="material-symbols-outlined search-icon">search</span>
+            </form>
+            <div class="header-profile">
+                <button class="profile-btn" id="profileBtn" aria-haspopup="true">
+                    <img src="profile.png" alt="Profile Image">
+                    <span class="profile-name">Eva Murphy</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+                <div class="profile-menu" id="profileMenu">
+                    <ul>
+                        <li><a href="#">View Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="mainlayout.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <div class="courses-container">
+            <h2 class="courses-header">Intro to REST APIs</h2>
+
+            <div class="course-lessons">
+                <div class="course-section-title">Handouts</div>
+                <ul>
+                    <li class="lesson complete">
+                        <a href="files/Handout1.pdf" download>
+                            Handout 1 <span class="lesson-status">&#10003;</span>
+                        </a>
+                    </li>
+                    <li class="lesson complete">
+                        <a href="files/Handout2.pdf" download>
+                            Handout 2 <span class="lesson-status">&#10003;</span>
+                        </a>
+                    </li>
+                    <li class="lesson complete">
+                        <a href="files/Handout3.pdf" download>
+                            Handout 3 <span class="lesson-status">&#10003;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="course-assessments">
+                <div class="course-section-title">Contents</div>
+                <ul>
+                    <li class="assessment complete" onclick="redirectTo('intro-restPRESTrainee.html')">
+                        Presentation <span class="assessment-status">&#10003;</span>
+                    </li>
+                    <li class="assessment complete" onclick="redirectTo('crud-projectVIDTrainee.html')">
+                        Video <span class="assessment-status">&#10003;</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        // Profile dropdown
+        const profileBtn = document.getElementById('profileBtn');
+        const profileMenu = document.getElementById('profileMenu');
+        document.addEventListener('click', function (e) {
+            if (profileBtn.contains(e.target)) {
+                profileMenu.classList.toggle('show');
+            } else {
+                profileMenu.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>

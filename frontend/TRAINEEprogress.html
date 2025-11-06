@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Progress</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="TRAINEEdashboards.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        .course-progress-container {
+            min-width: 100%;
+            margin: 1rem auto;
+            padding: 4rem;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 3px 12px rgba(79, 82, 186, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .course-progress-header {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #232864;
+            margin-bottom: 2.1rem;
+        }
+
+        .course-progress-bar {
+            width: 100%;
+            height: 28px;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            background: #e7e9f5;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 4px rgba(79, 82, 186, 0.09);
+        }
+
+        .progress-segment {
+            height: 100%;
+        }
+
+        .course1 {
+            background: linear-gradient(90deg, #6b9afd, #7bdff2);
+        }
+
+        .course2 {
+            background: linear-gradient(90deg, #b388ff, #8c9eff);
+        }
+
+        .course3 {
+            background: linear-gradient(90deg, #53e6b2, #85d47b);
+        }
+
+        .course4 {
+            background: linear-gradient(90deg, #fcb07e, #f94144);
+        }
+
+        .course5 {
+            background: linear-gradient(90deg, #ffe066, #fbc531);
+        }
+
+        .progress-legend {
+            margin-top: 1.3rem;
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.1rem 2.8rem;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 1.03rem;
+            color: #48508a;
+            font-weight: 500;
+            gap: 0.7em;
+        }
+
+        .legend-dot {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            margin-right: 0.56em;
+            vertical-align: middle;
+        }
+
+            .legend-dot.course1 {
+                background: linear-gradient(90deg, #6b9afd, #7bdff2);
+            }
+
+            .legend-dot.course2 {
+                background: linear-gradient(90deg, #b388ff, #8c9eff);
+            }
+
+            .legend-dot.course3 {
+                background: linear-gradient(90deg, #53e6b2, #85d47b);
+            }
+
+            .legend-dot.course4 {
+                background: linear-gradient(90deg, #fcb07e, #f94144);
+            }
+
+            .legend-dot.course5 {
+                background: linear-gradient(90deg, #ffe066, #fbc531);
+            }
+
+        @media (max-width: 700px) {
+            .course-progress-container {
+                padding: 1.1rem 0.3rem;
+            }
+
+            .progress-legend {
+                flex-direction: column;
+                gap: 0.7rem 0;
+            }
+        }
+
+        .progress-legend {
+            margin-top: 1.3rem;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem 0;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: flex-start;
+            font-size: 1.07rem;
+            color: #48508a;
+            font-weight: 500;
+            gap: 0.9em;
+            padding-bottom: 0.5em;
+        }
+
+        .legend-dot {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            margin-top: 0.15em;
+            flex-shrink: 0;
+            vertical-align: middle;
+        }
+
+            .legend-dot.course1 {
+                background: linear-gradient(90deg, #6b9afd, #7bdff2);
+            }
+
+            .legend-dot.course2 {
+                background: linear-gradient(90deg, #b388ff, #8c9eff);
+            }
+
+            .legend-dot.course3 {
+                background: linear-gradient(90deg, #53e6b2, #85d47b);
+            }
+
+            .legend-dot.course4 {
+                background: linear-gradient(90deg, #fcb07e, #f94144);
+            }
+
+            .legend-dot.course5 {
+                background: linear-gradient(90deg, #ffe066, #fbc531);
+            }
+
+        .legend-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.12em;
+            width: 100%;
+        }
+
+        .legend-course-title {
+            font-weight: 700;
+            color: #232864;
+            font-size: 1em;
+            margin-bottom: 0.03em;
+        }
+
+        .legend-detail-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.3em;
+            font-size: 0.97em;
+            color: #767da6;
+            font-weight: 500;
+        }
+
+        .legend-stat {
+            background: #f3f6fe;
+            border-radius: 6px;
+            padding: 0.17em 0.67em;
+        }
+
+        .legend-pct {
+            background: #f7e3ff;
+            color: #a03fed;
+            font-weight: 600;
+        }
+
+        .main-content {
+            width: 100%;
+            background: var(--muted-accent, #e7e9f5);
+            border-radius: 18px;
+            box-shadow: 0 3px 12px rgba(79, 82, 186, 0.11);
+            margin: 2.5rem 0 2rem 0;
+            padding: 2rem 2em 2.3rem 2em; /* Generous padding inside card */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1300px) {
+            .main-content {
+                max-width: 98vw;
+                padding: 2rem 1rem 2rem 1rem;
+                margin: 1rem 0 1.3rem 0;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .progress-legend {
+                gap: 0.7rem 0;
+            }
+
+            .legend-detail-row {
+                gap: 0.8em;
+            }
+        }
+    </style>
+</head>
+  <body>
+      <aside class="sidebar">
+          <div class="sidebar-header">
+              <img src="logo.png" alt="logo" />
+              <h2>Trainee</h2>
+          </div>
+          <ul class="sidebar-links">
+              <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+              <li><a href="TRAINEEdashboards.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+              <li><a href="TRAINEEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+
+              <h4><span>Progress</span><div class="menu-separator"></div></h4>
+              <li><a href="TRAINEEprogress.html"><span class="material-symbols-outlined">trending_up</span>Progress</a></li>
+              <li><a href="TRAINEEachievements.html"><span class="material-symbols-outlined">workspace_premium</span>Achievements</a></li>
+
+              <h4><span>Account</span><div class="menu-separator"></div></h4>
+              <li><a href="TRAINEEsettings.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+              <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Log Out</a></li>
+          </ul>
+
+          <div class="user-account">
+              <div class="user-profile">
+                  <img src="profile.png" alt="Profile Image" />
+                  <div class="user-detail">
+                      <h3>Jordan Smith</h3>
+                      <span>Learner</span>
+                  </div>
+              </div>
+          </div>
+      </aside>
+    <div class="main">
+      <header class="top-header">
+        <div class="header-title">Progress</div>
+        <form class="header-search" action="#" autocomplete="off">
+          <input type="search" placeholder="Search..." name="search" />
+          <span class="material-symbols-outlined search-icon">search</span>
+        </form>
+        <div class="header-profile">
+          <button
+            class="profile-btn"
+            id="profileBtn"
+            aria-haspopup="true"
+            type="button"
+          >
+            <img src="profile.png" alt="Profile Image" />
+            <span class="profile-name">Jordan Smith</span>
+            <span class="material-symbols-outlined">expand_more</span>
+          </button>
+          <div class="profile-menu" id="profileMenu">
+            <ul>
+              <li><a href="#">View Profile</a></li>
+              <li><a href="#">Settings</a></li>
+              <li><a href="#">Help</a></li>
+              <li><a href="mainlayout.html">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <!-- Main Content Box -->
+      <div class="course-progress-container">
+        <h2 class="course-progress-header">Course Progress Overview</h2>
+        <div class="course-progress-bar">
+          <div class="progress-segment course1" style="width: 24%"></div>
+          <div class="progress-segment course2" style="width: 19%"></div>
+          <div class="progress-segment course3" style="width: 29%"></div>
+          <div class="progress-segment course4" style="width: 18%"></div>
+          <div class="progress-segment course5" style="width: 10%"></div>
+        </div>
+        <div class="progress-legend">
+          <div class="legend-item">
+            <span class="legend-dot course1"></span>
+            <div class="legend-details">
+              <div class="legend-course-title">RESTful API Design</div>
+              <div class="legend-detail-row">
+                <span class="legend-stat legend-pct">24% complete</span>
+                <span class="legend-stat">6/25 lessons</span>
+                <span class="legend-stat">1/4 assessments</span>
+                <span class="legend-stat">Last activity: Oct 14, 2025</span>
+              </div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot course2"></span>
+            <div class="legend-details">
+              <div class="legend-course-title">
+                API Integration with JavaScript
+              </div>
+              <div class="legend-detail-row">
+                <span class="legend-stat legend-pct">19% complete</span>
+                <span class="legend-stat">4/21 lessons</span>
+                <span class="legend-stat">0/3 assessments</span>
+                <span class="legend-stat">Last activity: Oct 13, 2025</span>
+              </div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot course3"></span>
+            <div class="legend-details">
+              <div class="legend-course-title">Building GraphQL APIs</div>
+              <div class="legend-detail-row">
+                <span class="legend-stat legend-pct">29% complete</span>
+                <span class="legend-stat">7/24 lessons</span>
+                <span class="legend-stat">2/4 assessments</span>
+                <span class="legend-stat">Last activity: Oct 15, 2025</span>
+              </div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot course4"></span>
+            <div class="legend-details">
+              <div class="legend-course-title">
+                API Authentication & Security
+              </div>
+              <div class="legend-detail-row">
+                <span class="legend-stat legend-pct">18% complete</span>
+                <span class="legend-stat">3/17 lessons</span>
+                <span class="legend-stat">1/4 assessments</span>
+                <span class="legend-stat">Last activity: Oct 10, 2025</span>
+              </div>
+            </div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot course5"></span>
+            <div class="legend-details">
+              <div class="legend-course-title">API Testing & Documentation</div>
+              <div class="legend-detail-row">
+                <span class="legend-stat legend-pct">10% complete</span>
+                <span class="legend-stat">2/20 lessons</span>
+                <span class="legend-stat">0/2 assessments</span>
+                <span class="legend-stat">Last activity: Oct 4, 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        const profileBtn = document.getElementById("profileBtn");
+        const profileMenu = document.getElementById("profileMenu");
+        document.addEventListener("click", function (e) {
+          if (profileBtn && profileBtn.contains(e.target)) {
+            profileMenu.classList.toggle("show");
+          } else if (profileMenu && !profileMenu.contains(e.target)) {
+            profileMenu.classList.remove("show");
+          }
+        });
+      </script>
+    </div>
+  </body>
+</html>

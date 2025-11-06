@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Courses</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="CourseStyle.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+</head>
+<!-- Sidebar -->
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>Trainee</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="TRAINEEdashboards.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="TRAINEEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+
+            <h4><span>Progress</span><div class="menu-separator"></div></h4>
+            <li><a href="TRAINEEprogress.html"><span class="material-symbols-outlined">trending_up</span>Progress</a></li>
+            <li><a href="TRAINEEachievements.html"><span class="material-symbols-outlined">workspace_premium</span>Achievements</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="TRAINEEsettings.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Log Out</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3>Jordan Smith</h3>
+                    <span>Learner</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <div class="main">
+        <header class="top-header">
+            <div class="header-title">Courses</div>
+            <form class="header-search" action="#" autocomplete="off">
+                <input type="search" placeholder="Search..." name="search" />
+                <span class="material-symbols-outlined search-icon">search</span>
+            </form>
+            <div class="header-profile">
+                <button class="profile-btn"
+                        id="profileBtn"
+                        aria-haspopup="true"
+                        type="button">
+                    <img src="profile.png" alt="Profile Image" />
+                    <span class="profile-name">Jordan Smith</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+                <div class="profile-menu" id="profileMenu">
+                    <ul>
+                        <li><a href="#">View Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="mainlayout.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="course-panel">
+            <div class="panel-header-row">
+                <span class="panel-title">My Courses</span>
+                </div>
+                <!-- dynamic -->
+                <div class="course-accordion" id="course-accordion-card"></div>
+            </div>
+        </div>
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const accordionContainer = document.getElementById("course-accordion-card");
+    const traineeId = localStorage.getItem("userId") || "T1234"; // example fallback
+
+    // get courseid
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetCourseId = urlParams.get("courseId") ? parseInt(urlParams.get("courseId")) : null;
+
+    try {
+        const [coursesRes, lessonsRes, assessmentsRes, assignedRes] = await Promise.all([
+            fetch("http://localhost:3000/api/courses"),
+            fetch("http://localhost:3000/api/lessons"),
+            fetch("http://localhost:3000/api/assessments"),
+            fetch("http://localhost:3000/api/assigned")
+        ]);
+
+        const [courses, lessons, assessments, assigned] = await Promise.all([
+            coursesRes.json(),
+            lessonsRes.json(),
+            assessmentsRes.json(),
+            assignedRes.json()
+        ]);
+
+        accordionContainer.innerHTML = "";
+
+        courses.forEach(course => {
+            const courseLessons = lessons.filter(l => l.courseId === course.id).sort((a, b) => a.id - b.id);
+            const courseAssessments = assessments.filter(a => a.courseId === course.id);
+            const isAssigned = assigned.some(a => a.courseId === course.id && a.userId === traineeId);
+
+            const lessonList = courseLessons.length
+                ? courseLessons.map((l, index) => {
+                    const isFirst = index === 0;
+                    const isLocked = !isFirst;
+                    return `
+                        <li class="${isLocked ? 'locked' : 'active'}" 
+                            data-lesson-id="${l.id}"
+                            data-lesson-file="${l.htmlFile || ''}"
+                            ${isLocked ? '' : `onclick="redirectToLesson(${l.id}, '${l.htmlFile || ''}')"`}>
+                            ${l.title}
+                            ${isLocked ? '<span class="lock-icon material-symbols-outlined">lock</span>' : ''}
+                        </li>
+                    `;
+                }).join("")
+                : "<li>No lessons yet.</li>";
+
+            const assessmentList = courseAssessments.length
+                ? courseAssessments.map(a => `
+                        <li class="locked" data-assessment-id="${a.id}">
+                            ${a.title}
+                            <span class="lock-icon material-symbols-outlined">lock</span>
+                        </li>
+                    `).join("")
+                : "<li>No assessments yet.</li>";
+
+            const card = `
+                <div class="course-accordion-card" data-course-id="${course.id}">
+                    <button class="course-header-btn" aria-expanded="false">
+                        <img src="${course.image ? `http://localhost:3000${course.image}` : 'course.jpeg'}"
+                             class="course-img" alt="${course.title}">
+                        <div class="course-summary">
+                            <div class="course-title">${course.title}</div>
+                            <div class="course-description">${course.description || ''}</div>
+                        </div>
+                        <span class="material-symbols-outlined accordion-chevron">expand_more</span>
+                    </button>
+
+                    <div class="course-details" hidden>
+                        <div class="course-lessons">
+                            <div class="course-section-title">Lessons</div>
+                            <ul>${lessonList}</ul>
+                        </div>
+
+                        <div class="course-assessments">
+                            <div class="course-section-title">Assessments</div>
+                            <ul>${assessmentList}</ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            accordionContainer.innerHTML += card;
+        });
+
+        document.querySelectorAll(".course-header-btn").forEach(btn => {
+            btn.addEventListener("click", () => toggleAccordion(btn));
+        });
+        //auto open chosen course
+        if (targetCourseId) {
+        const targetCard = document.querySelector(`.course-accordion-card[data-course-id='${targetCourseId}'] .course-header-btn`);
+        if (targetCard) {
+        toggleAccordion(targetCard);
+
+        // scroll the opened course to the middle
+        const cardElement = targetCard.closest(".course-accordion-card");
+        if (cardElement) {
+            const rect = cardElement.getBoundingClientRect();
+            const offset = rect.top + window.scrollY - (window.innerHeight / 2) + (rect.height / 2);
+            window.scrollTo({ top: offset, behavior: "smooth" });
+                }
+            }
+        }       
+
+    } catch (err) {
+        console.error("Error loading courses:", err);
+    }
+});
+
+function toggleAccordion(button) {
+    const expanded = button.getAttribute("aria-expanded") === "true";
+    document.querySelectorAll(".course-header-btn").forEach(b => {
+        b.setAttribute("aria-expanded", "false");
+        b.nextElementSibling.hidden = true;
+    });
+    if (!expanded) {
+        button.setAttribute("aria-expanded", "true");
+        button.nextElementSibling.hidden = false;
+    }
+}
+
+async function redirectToLesson(lessonId) {
+    try {
+        window.open(`http://localhost:3000/lesson/${lessonId}`, "_blank");
+        const lessonItem = document.querySelector(`li[data-lesson-id="${lessonId}"]`);
+        if (lessonItem && lessonItem.classList.contains("active")) {
+            unlockNextItems(lessonItem);
+        }
+    } catch (err) {
+        console.error("Error loading lesson:", err);
+        alert("Failed to open lesson. Please try again later.");
+    }
+}
+
+async function redirectToAssessment(assessmentId) {
+    try {
+        window.open(`http://localhost:3000/assessment/${assessmentId}`, "_blank");
+        const assessmentItem = document.querySelector(`li[data-assessment-id="${assessmentId}"]`);
+        if (assessmentItem && assessmentItem.classList.contains("active")) {
+            unlockNextAssessment(assessmentItem);
+        }
+    } catch (err) {
+        console.error("Error loading assessment:", err);
+        alert("Failed to load assessment. Please try again later.");
+    }
+}
+
+function unlockNextItems(currentLesson) {
+    const lessons = [...currentLesson.parentElement.querySelectorAll("li")];
+    const currentIndex = lessons.indexOf(currentLesson);
+
+    // mark current lesson as completed
+    currentLesson.classList.add("completed");
+    currentLesson.classList.remove("active");
+
+    // unlock the next lesson
+    if (currentIndex < lessons.length - 1) {
+        const nextLesson = lessons[currentIndex + 1];
+        if (nextLesson.classList.contains("locked")) {
+            nextLesson.classList.remove("locked");
+            nextLesson.classList.add("active");
+            nextLesson.setAttribute("onclick", `redirectToLesson(${nextLesson.dataset.lessonId})`);
+            const lockIcon = nextLesson.querySelector(".lock-icon");
+            if (lockIcon) lockIcon.remove();
+        }
+    }
+
+    // check if all lessons are completed before unlocking the first assessment
+    const allLessonsCompleted = lessons.every(lesson => lesson.classList.contains("completed"));
+
+    if (allLessonsCompleted) {
+        const assessmentSection = currentLesson.closest(".course-details").querySelector(".course-assessments ul");
+        if (assessmentSection) {
+            const firstAssessment = assessmentSection.querySelector("li.locked");
+            if (firstAssessment) {
+                firstAssessment.classList.remove("locked");
+                firstAssessment.classList.add("active");
+                firstAssessment.setAttribute("onclick", `redirectToAssessment(${firstAssessment.dataset.assessmentId})`);
+                const lockIcon = firstAssessment.querySelector(".lock-icon");
+                if (lockIcon) lockIcon.remove();
+            }
+        }
+    }
+}
+
+function unlockNextAssessment(currentAssessment) {
+    const assessments = [...currentAssessment.parentElement.querySelectorAll("li")];
+    const currentIndex = assessments.indexOf(currentAssessment);
+
+    // mark assessment as completed
+    currentAssessment.classList.add("completed");
+    currentAssessment.classList.remove("active");
+
+    // unlock next assessment
+    if (currentIndex < assessments.length - 1) {
+        const nextAssessment = assessments[currentIndex + 1];
+        if (nextAssessment.classList.contains("locked")) {
+            nextAssessment.classList.remove("locked");
+            nextAssessment.classList.add("active");
+            nextAssessment.setAttribute("onclick", `redirectToAssessment(${nextAssessment.dataset.assessmentId})`);
+            const lockIcon = nextAssessment.querySelector(".lock-icon");
+            if (lockIcon) lockIcon.remove();
+        }
+    }
+}
+
+
+</script>
+
+</body>
+</html>

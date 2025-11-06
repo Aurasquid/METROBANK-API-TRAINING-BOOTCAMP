@@ -1,0 +1,294 @@
+{
+  "courses": [
+    {
+      "id": 1762095669975,
+      "title": "RESTful API Design",
+      "description": "Learn how to structure and build scalable REST APIs, from endpoints to best practices.",
+      "image": "/uploads/courses/1762095669970-course.jpeg",
+      "createdAt": "2025-11-02T15:01:09.975Z",
+      "uploadedBy": "S1234",
+      "status": "Active"
+    },
+    {
+      "id": 1762095734240,
+      "title": "API Integration with JavaScript",
+      "description": "Connect frontends to APIs, send requests, handle responses, and integrate third party services.",
+      "image": "/uploads/courses/1762095734237-course.jpeg",
+      "createdAt": "2025-11-02T15:02:14.240Z",
+      "uploadedBy": "S1234",
+      "status": "Active"
+    },
+    {
+      "id": 1762305393193,
+      "title": "more test",
+      "description": "asd",
+      "image": "/uploads/courses/1762305393187-course.jpeg",
+      "createdAt": "2025-11-05T01:16:33.193Z",
+      "uploadedBy": "S1234",
+      "status": "Active"
+    },
+    {
+      "id": 1762351368278,
+      "title": "wompwomp",
+      "description": "wiener",
+      "image": "/uploads/courses/1762351368274-bg.jpg",
+      "createdAt": "2025-11-05T14:02:48.278Z",
+      "uploadedBy": "S1234",
+      "status": "Active"
+    }
+  ],
+  "lessons": [
+    {
+      "id": 1762095810834,
+      "title": "Intro to REST APIs",
+      "description": "Learn the fundamentals of REST architecture and HTTP methods.",
+      "courseId": 1762095669975,
+      "content": {
+        "handout": "/uploads/lessons/1762095810828-05_Handout_1(5).pdf",
+        "videos": [
+          "/uploads/videos/intro-rest.mp4"
+        ],
+        "powerpoints": [
+          "/uploads/ppts/rest-api-overview.pptx"
+        ]
+      },
+      "uploadedBy": "S1234",
+      "uploadedAt": "2025-11-02T15:03:30.834Z"
+    },
+    {
+      "id": 1762095810835,
+      "title": "Designing Endpoints",
+      "description": "How to design resource-based endpoints with consistency and scalability.",
+      "courseId": 1762095669975,
+      "content": {
+        "handout": "/uploads/lessons/1762095810835-designing-endpoints.pdf",
+        "videos": [],
+        "powerpoints": []
+      },
+      "uploadedBy": "S1234",
+      "uploadedAt": "2025-11-02T15:08:30.834Z"
+    },
+    {
+      "id": 1762453826789,
+      "title": "weeeee",
+      "description": "eeeee",
+      "courseId": 1762351368278,
+      "content": {
+        "handout": null,
+        "videos": [],
+        "powerpoints": []
+      },
+      "uploadedBy": "S1234",
+      "uploadedAt": "2025-11-06T18:30:26.789Z"
+    },
+    {
+      "id": 1762455116562,
+      "title": "aaaa",
+      "description": "aaa",
+      "courseId": 1762351368278,
+      "content": {
+        "handout": null,
+        "videos": [],
+        "powerpoints": []
+      },
+      "uploadedBy": "S1234",
+      "uploadedAt": "2025-11-06T18:51:56.562Z"
+    }
+  ],
+  "assessments": [
+    {
+      "id": 1762096004859,
+      "title": "API Design Quiz",
+      "type": "mcq",
+      "difficulty": "Intermediate",
+      "courseId": 1762095669975,
+      "lessonId": 1762095810834,
+      "duration": "00:10",
+      "deadline": null,
+      "questions": [
+        {
+          "id": 1,
+          "questionNumber": 1,
+          "questionType": "mcq",
+          "question": "Which HTTP method is idempotent?",
+          "options": [
+            "GET",
+            "POST",
+            "PATCH",
+            "DELETE"
+          ],
+          "answer": "GET",
+          "points": 1
+        },
+        {
+          "id": 2,
+          "questionNumber": 2,
+          "questionType": "mcq",
+          "question": "Which status code means 'Created'?",
+          "options": [
+            "200",
+            "201",
+            "204",
+            "400"
+          ],
+          "answer": "201",
+          "points": 1
+        }
+      ],
+      "createdAt": "2025-11-02T15:06:44.859Z"
+    },
+    {
+      "id": 1762096012123,
+      "title": "API Reflection",
+      "type": "textbox",
+      "difficulty": "Easy",
+      "courseId": 1762095669975,
+      "lessonId": 1762095810834,
+      "duration": null,
+      "deadline": "2025-11-10T23:59:00Z",
+      "questions": [
+        {
+          "id": 1,
+          "questionNumber": 1,
+          "questionType": "textbox",
+          "question": "Write at least 150 words discussing how REST principles guided your API design decisions.",
+          "answer": "",
+          "points": 1
+        },
+        {
+          "id": 2,
+          "questionNumber": 2,
+          "questionType": "textbox",
+          "question": "Write at least 150 words discussing how REST principles guided your API design decisions.",
+          "answer": "",
+          "points": 5
+        }
+      ],
+      "createdAt": "2025-11-03T12:15:00Z"
+    },
+    {
+      "id": 1762096011123,
+      "title": "CRUD Project",
+      "type": "code",
+      "difficulty": "Hard",
+      "courseId": 1762095669975,
+      "lessonId": 1762095810835,
+      "duration": "02:00",
+      "deadline": "2025-11-15T23:59:00Z",
+      "questions": [
+        {
+          "id": 1,
+          "questionNumber": 1,
+          "questionType": "code",
+          "question": "Use Express.js to create endpoints for user creation, update, and deletion. Upload your API code as a .zip or GitHub link.",
+          "answer": "{ id: 1, name: 'John' }",
+          "points": 1
+        },
+        {
+          "id": 2,
+          "questionNumber": 2,
+          "questionType": "code",
+          "question": "Use Express.js to create endpoints for user creation, update, and deletion. Upload your API code as a .zip or GitHub link.",
+          "answer": "{ id: 1, name: 'John' }",
+          "points": 10
+        }
+      ],
+      "createdAt": "2025-11-02T15:06:44.859Z"
+    }
+  ],
+  "submissions": [
+    {
+      "id": 1,
+      "traineeId": "T1234",
+      "assessmentId": 1762096004859,
+      "score": 85,
+      "submittedAt": "2025-10-23T11:32:00Z"
+    },
+    {
+      "id": 2,
+      "traineeId": "T1234",
+      "assessmentId": 1762096011123,
+      "codeSubmission": "/uploads/submissions/1762096011123-crud-api.zip",
+      "score": 95,
+      "submittedAt": "2025-10-29T09:00:00Z"
+    },
+    {
+      "id": 3,
+      "traineeId": "T1234",
+      "assessmentId": 1762096012123,
+      "textResponse": "I realized that keeping endpoints resource-based improved consistency...",
+      "submittedAt": "2025-10-30T12:00:00Z"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "userId": "A1234",
+      "fullName": "Admin",
+      "userType": "Admin",
+      "email": "admin@mbtraining.ph",
+      "password": "admin",
+      "createdAt": "2025-10-30T15:52:38.996Z",
+      "status": "Active",
+      "dateArchived": ""
+    },
+    {
+      "id": 2,
+      "userId": "S1234",
+      "fullName": "Eva Murphy",
+      "userType": "SME",
+      "email": "evamurphy@mbtraining.ph",
+      "password": "eva",
+      "createdAt": "2025-10-30T15:52:38.996Z",
+      "status": "Active",
+      "dateArchived": ""
+    },
+    {
+      "id": 3,
+      "userId": "T1234",
+      "fullName": "Jordan Smith",
+      "userType": "Trainee",
+      "email": "jordansmith@mbtraining.ph",
+      "password": "jordan",
+      "createdAt": "2025-10-30T15:52:38.996Z",
+      "status": "Active",
+      "dateArchived": ""
+    },
+    {
+      "id": 1762281616667,
+      "userId": "T2138",
+      "fullName": "ttetet",
+      "userType": "Trainee",
+      "email": "et@mbtraining.ph",
+      "password": "$2b$10$DNEa1LWmO4e2NB4nCbqFq.67lvP3kIhczKaCMCkyFifOXXnxqqETC",
+      "createdAt": "2025-11-04T18:40:16.667Z",
+      "status": "Archived",
+      "dateArchived": "2025-11-04T18:43:32.033Z"
+    },
+    {
+      "id": 1762322377706,
+      "userId": "T8916",
+      "fullName": "gwen",
+      "userType": "Trainee",
+      "email": "gwen@mbtraining.ph",
+      "password": "$2b$10$xN002FnV5.rYjlklbXVb2e5tiYXhTaDMXOLR0Q0Toaox5AfrBbC7a",
+      "createdAt": "2025-11-05T05:59:37.706Z",
+      "status": "Archived",
+      "dateArchived": "2025-11-05T06:00:40.345Z"
+    }
+  ],
+  "assigned": [
+    {
+      "id": 1,
+      "userId": "T1234",
+      "fullName": "Jordan Smith",
+      "userType": "Trainee",
+      "email": "jordansmith@mbtraining.ph",
+      "courseId": 1762095734240,
+      "courseTitle": "API Integration with JavaScript",
+      "status": "Not Started",
+      "progress": "0%",
+      "assignedDate": "2025-10-29T15:54:11.053Z"
+    }
+  ]
+}

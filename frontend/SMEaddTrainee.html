@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Add New Trainee</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="newUploadStyles.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>SME</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+            <h4><span><b>Training Materials</b></span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+        <section class="assign-form-section">
+            <div class="panel-header-row">
+                <button type="button" class="btn-box back-icon-btn" onclick="window.history.back()">
+                    <i class="material-icons">arrow_back</i>
+                </button>
+                <h2 class="form-title">Assign Course</h2>
+            </div>
+            <form id="assignForm" class="assign-form" enctype="multipart/form-data">
+                <!-- TRAINEE ID -->
+                <label for="assignID">Trainee ID</label>
+                <div style="display: flex; gap: 10px;">
+                    <div class="input-with-button">
+                        <input type="text" name="assignID" id="assignID" placeholder="Enter Trainee ID" required />
+                        <button type="button" id="findUserBtn" class="find-btn">Find</button>
+                    </div>
+                </div>
+
+                <!-- TRAINEE NAME -->
+                <label for="assignTrainee">Trainee Name</label>
+                <input type="text" name="assignTrainee" id="assignTrainee" readonly />
+
+                <!-- TRAINEE EMAIL -->
+                <label for="assignEmail">Email</label>
+                <input type="text" name="assignEmail" id="assignEmail" readonly />
+
+                <!-- COURSE -->
+                <label for="assignCourse">Assign Course</label>
+                <select id="assignCourse" name="assignCourse" required disabled>
+                    <option value="">Select Course</option>
+                </select>
+
+                <div class="btn-row">
+                    <button type="button" class="btn-box clear-btn" id="clearAllBtn">
+                        <i class="material-icons">clear_all</i> Clear All
+                    </button>
+                    <button type="submit" class="btn-box add-btn">  <!-- BUTTON -->
+                        <i class="material-icons">person_add</i> Add User
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+    <script>
+      const idInput = document.getElementById("assignID");
+      const nameInput = document.getElementById("assignTrainee");
+      const emailInput = document.getElementById("assignEmail");
+      const findBtn = document.getElementById("findUserBtn");
+      const courseSelect = document.getElementById("assignCourse");
+      const saveBtn = document.querySelector(".add-btn");
+
+      findUserBtn.addEventListener("click", fetchUserData);
+      idInput.addEventListener("input", debounce(fetchUserData, 500));
+
+      function debounce(fn, delay) {
+        let timeout;
+        return (...args) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn(...args), delay);
+        };
+      }
+
+      async function fetchUserData() {
+        const userId = idInput.value.trim();
+        if (!userId) return;
+
+        try {
+          const res = await fetch(`http://localhost:3000/api/users/${userId}`);
+          if (!res.ok) throw new Error("User not found");
+
+          const user = await res.json();
+          if (user.userType !== "Trainee") {
+            alert("⚠️ Only Trainee accounts can be assigned courses.");
+            return;
+          }
+
+          nameInput.value = user.fullName || "";
+          emailInput.value = user.email || "";
+          courseSelect.disabled = false;
+          saveBtn.disabled = false;
+
+          await loadCourses();
+        } catch (err) {
+          console.error("Error fetching user:", err);
+          nameInput.value = "";
+          emailInput.value = "";
+          courseSelect.disabled = true;
+          saveBtn.disabled = true;
+        }
+      }
+
+      async function loadCourses() {
+        try {
+          const res = await fetch("http://localhost:3000/api/courses");
+          if (!res.ok) throw new Error("Failed to fetch courses");
+
+          const courses = await res.json();
+          courseSelect.innerHTML = '<option value="">Select Course</option>';
+
+          courses.forEach(course => {
+            const option = document.createElement("option");
+            option.value = course.id;
+            option.textContent = course.title;
+            courseSelect.appendChild(option);
+          });
+        } catch (err) {
+          console.error("❌ Error loading courses:", err);
+        }
+      }
+
+      document.getElementById("assignForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const userId = idInput.value.trim();
+  const fullName = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const courseTitle = courseSelect.selectedOptions[0]?.text;
+
+  if (!userId || !courseTitle) {
+    alert("⚠️ Please select a trainee and course first.");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:3000/api/assigned", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId,
+        fullName,
+        userType: "Trainee",
+        email,
+        courseTitle,
+        status: "Not Started",
+        progress: "0%",
+        assignedDate: new Date().toISOString(),
+      }),
+    });
+
+    // Handle duplicate assignment
+    if (res.status === 409) {
+      const data = await res.json();
+      alert(data.message || "⚠️ This trainee is already assigned to that course.");
+      return;
+    }
+
+    // Handle other errors
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`Failed to assign trainee: ${errorText}`);
+    }
+
+    const data = await res.json();
+    alert(`✅ ${fullName} successfully assigned to ${courseTitle}!`);
+    console.log("Assignment saved:", data);
+
+    // Reset form and disable course select after saving
+    document.getElementById("assignForm").reset();
+    courseSelect.disabled = true;
+    saveBtn.disabled = true;
+  } catch (err) {
+    console.error("❌ Error assigning trainee:", err);
+    alert("Failed to save assignment.");
+  }
+});
+
+
+
+      document.getElementById("clearAllBtn").addEventListener("click", () => {
+        document.getElementById("assignForm").reset();
+        nameInput.value = "";
+        emailInput.value = "";
+        courseSelect.disabled = true;
+        saveBtn.disabled = true;
+      });
+    </script>
+
+
+</body>
+</html>

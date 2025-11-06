@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Upload Content</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="newUploadStyles.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>SME</h2>
+        </div>
+
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+            <h4><span><b>Training Materials</b></span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEsettings.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main">
+        <section class="content-form-section">
+            <div class="panel-header-row">
+                <button type="button" class="btn-box back-icon-btn" onclick="window.history.back()">
+                    <i class="material-icons">arrow_back</i>
+                </button>
+                <h2 class="form-title">Upload New Content</h2> <!-- new upload LABEL -->
+            </div>
+
+            <!-- Upload Content Form -->
+            <form class="content-form">
+                <label for="contentType">Type of Content</label>
+                <select id="contentType" name="contentType" required>
+                    <option value="">Select type</option>
+                    <option value="Presentation">Presentation</option>
+                    <option value="Video">Video</option>
+                </select>
+
+                <label>Attachment</label>
+                <div class="content-row">
+                    <input type="file" id="contentFile" name="contentFile"
+                           accept=".ppt,.pptx,video/*,.pdf,.doc,.docx" required />
+                </div>
+
+                <div class="attachment-info">
+                    Supported: ppt, pptx, pdf, doc, docx, and video formats
+                </div>
+
+                <div class="meta-row">
+                    <div class="form-group">
+                        <label for="contentCourse">Course</label>
+                        <select id="contentCourse" name="contentCourse" required>
+                            <option value="">Select Course</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contentLesson">Lesson</label>
+                        <select id="contentLesson" name="contentLesson" required>
+                            <option value="">Select Lesson</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label for="contentDescription">Description (optional)</label>
+                <textarea class="notes-area" id="contentDescription" name="contentDescription" placeholder="Add details or instructions..."></textarea>
+
+                <button type="submit" class="save-btn">Upload</button>
+            </form>
+
+            <div style="font-size: .92em; color:#6e7288; margin-top:1em;">
+                <b>Tips:</b>
+                <ul style="margin: 0.4em 0 0 1.7em; padding: 0; color: #787c98;">
+                    <li>Use meaningful file names (e.g. "Course1_Intro.pptx")</li>
+                    <li>You can add a presentation and a supplementary video for the same lesson</li>
+                    <li>Larger videos may take longer to upload; ensure a stable connection</li>
+                    <li>Double-check you have selected the correct course/lesson</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- SCRIPT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+          const courseSelect = document.getElementById("contentCourse");
+          const lessonSelect = document.getElementById("contentLesson");
+          const form = document.querySelector(".content-form");
+
+          // Load courses
+          async function loadCourses() {
+            try {
+              const res = await fetch("http://localhost:3000/api/courses");
+              const courses = await res.json();
+
+              courseSelect.innerHTML = '<option value="">Select a course</option>';
+              courses.forEach(course => {
+                const opt = document.createElement("option");
+                opt.value = course.id;
+                opt.textContent = course.title;
+                courseSelect.appendChild(opt);
+              });
+            } catch (err) {
+              console.error("Error loading courses:", err);
+            }
+          }
+
+          // Load lessons by course
+          async function loadLessons(courseId) {
+            try {
+              const res = await fetch(`http://localhost:3000/api/lessons?courseId=${courseId}`);
+              const lessons = await res.json();
+
+              lessonSelect.innerHTML = '<option value="">Select a lesson</option>';
+              lessons.forEach(lesson => {
+                const opt = document.createElement("option");
+                opt.value = lesson.id;
+                opt.textContent = lesson.title;
+                lessonSelect.appendChild(opt);
+              });
+            } catch (err) {
+              console.error("Error loading lessons:", err);
+            }
+          }
+
+          courseSelect.addEventListener("change", (e) => {
+            const courseId = e.target.value;
+            if (courseId) loadLessons(courseId);
+            else lessonSelect.innerHTML = '<option value="">Select a lesson</option>';
+          });
+
+          // Handle upload submission
+          form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const fileInput = document.getElementById("contentFile");
+            const formData = new FormData();
+
+            formData.append("contentFile", fileInput.files[0]);
+            formData.append("type", document.getElementById("contentType").value);
+            formData.append("courseId", document.getElementById("contentCourse").value);
+            formData.append("lessonId", document.getElementById("contentLesson").value);
+            formData.append("description", document.getElementById("contentDescription").value);
+
+            try {
+              const res = await fetch("http://localhost:3000/api/upload-content", {
+                method: "POST",
+                body: formData,
+              });
+              if (!res.ok) throw new Error("Upload failed");
+              const data = await res.json();
+              alert(`✅ Upload successful: ${data.fileName}`);
+              form.reset();
+            } catch (err) {
+              console.error("Upload error:", err);
+              alert("❌ Upload failed. Please try again.");
+            }
+          });
+
+          // Initial load
+          loadCourses();
+        });
+    </script>
+
+</body>
+</html>

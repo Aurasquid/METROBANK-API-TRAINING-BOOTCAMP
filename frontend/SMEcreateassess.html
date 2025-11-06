@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Create Assessment</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="SMEtestcreate.css" />
+    <link rel="stylesheet" href="newUploadStyles.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>Training</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+            <li><a href="SMEnotifications.html"><span class="material-symbols-outlined">notifications_active</span>Notifications</a></li>
+
+            <h4><span><b>Training Materials</b></span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html" class="active"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3>Eva Murphy</h3>
+                    <span>SME</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+        <div class="main-content-card">
+            <div class="assessment-header-row">
+                <h1 class="assessment-title">Create Assessment</h1>
+            </div>
+
+            <!-- Form -->
+            <form id="assessmentForm" class="assessment-form">
+                <div class="assessment-form-row">
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="assessmentTitle">Title</label>
+                            <input type="text" id="assessmentTitle" placeholder="Enter assessment title">
+                        </div>
+                        <div class="form-group">
+                            <label for="difficulty">Difficulty</label>
+                            <select id="difficulty">
+                                <option value="">Select difficulty</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                            <div class="answer-type-row">
+                                <label for="answerType">Type:</label>
+                                <select id="answerType">
+                                    <option value="">Select Type</option>
+                                    <option value="mcq">Multiple Choice</option>
+                                    <option value="textbox">Textbox</option>
+                                    <option value="code">Code</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="assessCourse">Course</label>
+                            <select id="assessCourse"><option value="">Select Course</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="assessLesson">Lesson</label>
+                            <select id="assessLesson"><option value="">Select Lesson</option></select>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="form-group">
+                            <label for="duration">Duration</label>
+                            <input type="time" id="duration" step="1" value="00:00:00">
+                        </div>
+                        <div class="form-group">
+                            <label for="deadline">Deadline</label>
+                            <input type="datetime-local" id="deadline">
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Question + AI -->
+            <div class="assessment-question-ai-row">
+                <div class="question-area">
+                    <div class="question-row">
+                        <div class="question-number">
+                            <label>Question</label>
+                            <input type="text" value="1 of 1" readonly>
+                        </div>
+                        <div class="points">
+                            <label>Points</label>
+                            <input type="number" value="1" min="1">
+                        </div>
+                    </div>
+
+                    <div class="question-textbox">
+                        <label for="questionText">Question Text</label>
+                        <textarea id="questionText" placeholder="Enter question..."></textarea>
+                    </div>
+
+                    <hr class="separator" />
+
+
+                    <!-- Multiple Choice -->
+                    <div class="answer-input-row" id="mcqInputs">
+                        <div class="mcq-left">
+                            <label>Choices</label>
+                            <div id="choicesContainer"></div>
+                            <button type="button" id="addChoiceBtn">+ Add Choice</button>
+                        </div>
+                        <div class="mcq-right">
+                            <label>Correct Answer</label>
+                            <input type="text" class="correct-answer" placeholder="Enter correct answer">
+                        </div>
+                    </div>
+
+                    <!-- Textbox -->
+                    <div class="answer-input-row" id="textboxInput" style="display:none;">
+                        <label>Answer</label>
+                        <textarea id="textboxAnswer" placeholder="Write expected answer..."></textarea>
+
+                        <label>Correct Answer</label>
+                        <input type="text" class="correct-answer" placeholder="Enter correct answer">
+                    </div>
+
+                    <!-- Code -->
+                    <div class="answer-input-row" id="codeInput" style="display:none;">
+                        <label>Answer</label>
+                        <textarea id="codeAnswer" placeholder="Enter correct code..."></textarea>
+
+                        <label>Correct Answer</label>
+                        <input type="text" class="correct-answer" placeholder="Enter correct answer">
+                    </div>
+                </div>
+
+                <!-- AI Assistant -->
+                <div class="ai-column">
+                    <div class="ai-helper-panel">
+                        <div class="ai-chat-container">
+                            <div class="ai-messages" id="aiMessages">
+                                <div class="ai-message bot"><strong>🤖 AI:</strong> How can I assist you with your quiz?</div>
+                            </div>
+                        </div>
+                        <form id="aiChatForm">
+                            <div class="ai-input">
+                                <input type="text" id="aiPrompt" placeholder="Type your prompt..." />
+                                <button type="submit" class="ai-sendbutton">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="question-navigation">
+                <button class="prev-button">&lt; Prev</button>
+                <button class="next-button">Next &gt;</button>
+            </div>
+
+            <hr class="separator" />
+            <div class="new-question-button-container">
+                <button type="button" class="save-assessment-btn">Save Assessment</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const courseSelect = document.getElementById("assessCourse");
+        const lessonSelect = document.getElementById("assessLesson");
+        const answerType = document.getElementById("answerType");
+        const mcqInputs = document.getElementById("mcqInputs");
+        const textboxInput = document.getElementById("textboxInput");
+        const codeInput = document.getElementById("codeInput");
+        const addChoiceBtn = document.getElementById("addChoiceBtn");
+        const choicesContainer = document.getElementById("choicesContainer");
+
+        let currentIndex = 0;
+        let questions = [
+            { number: 1, text: "", type: "", options: [], answer: "", points: 1 }
+        ];
+        let typeLocked = false;
+
+        // === Toggle Answer Input Type ===
+        answerType.addEventListener("change", () => {
+            const type = answerType.value;
+
+            // Hide all
+            mcqInputs.style.display = "none";
+            textboxInput.style.display = "none";
+            codeInput.style.display = "none";
+
+            // Clear all previous values
+            document.querySelectorAll(".choice-input").forEach(i => (i.value = ""));
+            document.querySelectorAll(".correct-answer").forEach(i => (i.value = ""));
+            document.getElementById("textboxAnswer").value = "";
+            document.getElementById("codeAnswer").value = "";
+
+            // Show chosen type only
+            if (type === "mcq") mcqInputs.style.display = "flex";
+            if (type === "textbox") textboxInput.style.display = "block";
+            if (type === "code") codeInput.style.display = "block";
+
+            // Lock only after a type is selected for the *first* question
+            if (type && !typeLocked && currentIndex === 0) {
+                typeLocked = true;
+                answerType.disabled = true;
+            }
+        });
+
+        // === Add / Remove MCQ Choices ===
+        addChoiceBtn.addEventListener("click", () => {
+            const div = document.createElement("div");
+            div.className = "choice-input-row";
+            div.innerHTML = `
+            <input type="text" class="choice-input" placeholder="Enter choice">
+            <button type="button" class="remove-choice">✕</button>`;
+            div.querySelector(".remove-choice").addEventListener("click", () => div.remove());
+            choicesContainer.appendChild(div);
+        });
+
+        // === Save Current Question ===
+        function saveCurrentQuestion() {
+            const q = questions[currentIndex];
+            q.text = document.getElementById("questionText").value.trim();
+            q.points = parseInt(document.querySelector(".points input").value) || 1;
+            q.type = answerType.value;
+
+            q.options = [];
+            q.answer = "";
+
+            if (q.type === "mcq") {
+                q.options = [...document.querySelectorAll(".choice-input")]
+                    .map(i => i.value.trim())
+                    .filter(Boolean);
+                q.answer = document.querySelector("#mcqInputs .correct-answer").value.trim();
+            } else if (q.type === "textbox") {
+                q.answer = document.querySelector("#textboxInput .correct-answer").value.trim();
+            } else if (q.type === "code") {
+                q.answer = document.querySelector("#codeInput .correct-answer").value.trim();
+            }
+        }
+
+        // === Load Question ===
+        function loadQuestion() {
+            const q = questions[currentIndex];
+            document.querySelector(".question-number input").value = `${q.number} of ${questions.length}`;
+            document.getElementById("questionText").value = q.text;
+            document.querySelector(".points input").value = q.points;
+
+            // Prevent type change after first lock
+            if (!typeLocked && q.type) {
+                answerType.value = q.type;
+            } else if (q.type) {
+                answerType.value = q.type;
+            } else {
+                answerType.value = "";
+            }
+
+            answerType.dispatchEvent(new Event("change"));
+
+            choicesContainer.innerHTML = "";
+            document.getElementById("textboxAnswer").value = "";
+            document.getElementById("codeAnswer").value = "";
+
+            if (q.type === "mcq") {
+                q.options.forEach(opt => {
+                    const div = document.createElement("div");
+                    div.className = "choice-input-row";
+                    div.innerHTML = `
+                    <input type="text" class="choice-input" value="${opt}">
+                    <button type="button" class="remove-choice">✕</button>`;
+                    div.querySelector(".remove-choice").addEventListener("click", () => div.remove());
+                    choicesContainer.appendChild(div);
+                });
+                document.querySelector("#mcqInputs .correct-answer").value = q.answer;
+            } else if (q.type === "textbox") {
+                document.querySelector("#textboxInput .correct-answer").value = q.answer;
+            } else if (q.type === "code") {
+                document.querySelector("#codeInput .correct-answer").value = q.answer;
+            }
+        }
+
+        // === Navigation Buttons ===
+        document.querySelector(".next-button").addEventListener("click", () => {
+            saveCurrentQuestion();
+
+            if (currentIndex === questions.length - 1) {
+                questions.push({ number: questions.length + 1, text: "", type: answerType.value, options: [], answer: "", points: 1 });
+            }
+
+            currentIndex++;
+            loadQuestion();
+        });
+
+        document.querySelector(".prev-button").addEventListener("click", () => {
+            saveCurrentQuestion();
+            if (currentIndex > 0) currentIndex--;
+            loadQuestion();
+        });
+
+        // === Fetch Courses and Lessons ===
+        async function loadCourses() {
+            try {
+                const res = await fetch("http://localhost:3000/api/courses");
+                const courses = await res.json();
+                courseSelect.innerHTML = '<option value="">Select Course</option>';
+                courses.forEach(c => {
+                    const opt = document.createElement("option");
+                    opt.value = c.id;
+                    opt.textContent = c.title;
+                    courseSelect.appendChild(opt);
+                });
+            } catch (err) {
+                console.error("Error fetching courses", err);
+            }
+        }
+
+        courseSelect.addEventListener("change", async () => {
+            const courseId = courseSelect.value;
+            if (!courseId) return;
+            lessonSelect.innerHTML = '<option value="">Loading...</option>';
+            try {
+                const res = await fetch(`http://localhost:3000/api/lessons?courseId=${courseId}`);
+                const lessons = await res.json();
+                lessonSelect.innerHTML = '<option value="">Select Lesson</option>';
+                lessons.forEach(l => {
+                    const opt = document.createElement("option");
+                    opt.value = l.id;
+                    opt.textContent = l.title;
+                    lessonSelect.appendChild(opt);
+                });
+            } catch (err) {
+                console.error("Error fetching lessons", err);
+            }
+        });
+
+        // === Save Assessment ===
+        document.querySelector(".save-assessment-btn").addEventListener("click", async () => {
+            saveCurrentQuestion();
+            const payload = {
+                title: document.getElementById("assessmentTitle").value.trim(),
+                difficulty: document.getElementById("difficulty").value,
+                courseId: courseSelect.value,
+                lessonId: lessonSelect.value,
+                duration: document.getElementById("duration").value,
+                deadline: document.getElementById("deadline").value,
+                questions
+            };
+
+            try {
+                const res = await fetch("http://localhost:3000/api/assessments", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                alert(data.success ? "✅ Assessment saved!" : "❌ Failed to save assessment");
+            } catch (err) {
+                console.error("Error saving assessment", err);
+            }
+        });
+
+        // === Init ===
+        loadCourses();
+        loadQuestion();
+    </script>
+
+</body>
+</html>

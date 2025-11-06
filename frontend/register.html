@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup | Metrobank Bootcamp</title>
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #161a2d;
+            --secondary: #19376d;
+            --accent: #4f52ba;
+            --hover: #819cfa;
+            --background: #f0f4ff;
+            --card: #ffffff;
+            --border: #e9eaf1;
+            --text: #22223b;
+            --input-bg: #f6f8fa;
+            --input-border: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: var(--card);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+        }
+
+        .back-button {
+            list-style: none;
+            margin-bottom: 10px;
+        }
+
+            .back-button a {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                background: var(--muted-accent, #e8ecff);
+                transition: 0.2s;
+            }
+
+                .back-button a:hover {
+                    background: var(--hover);
+                }
+
+            .back-button span {
+                color: var(--secondary);
+            }
+
+        header {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--text);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(79, 82, 186, 0.15);
+        }
+
+        .button {
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            padding: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+            .button:hover {
+                background: var(--hover);
+            }
+
+        .signup {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 18px;
+            color: var(--secondary);
+        }
+
+            .signup a {
+                color: var(--accent);
+                font-weight: 600;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+
+                .signup a:hover {
+                    color: var(--hover);
+                }
+
+        .btn-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 22px;
+            gap: 14px;
+        }
+
+        .btn-box {
+            flex: 1;
+            text-align: center;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px 0;
+            cursor: pointer;
+            border: none;
+            transition: 0.2s;
+        }
+
+        .btn-clear {
+            background: #e17055;
+            color: #fff;
+        }
+
+            .btn-clear:hover {
+                background: #d94e34;
+            }
+
+        .btn-back {
+            background: var(--muted-accent, #e8ecff);
+            color: var(--secondary);
+        }
+
+            .btn-back:hover {
+                background: var(--hover);
+                color: #fff;
+            }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 28px 22px;
+                margin: 20px;
+            }
+
+            .btn-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button type="button" class="btn-box btn-back" onclick="window.history.back()"> Back </button>
+
+        <header>Signup</header>
+
+        <form id="signupForm">
+            <input type="text" id="email" placeholder="Enter your email" required />
+            <input type="password"
+                   id="password"
+                   placeholder="Create a password"
+                   required />
+            <input type="password"
+                   id="confirmPassword"
+                   placeholder="Confirm your password"
+                   required />
+
+            <input type="button" class="button" value="Signup" id="signupBtn" />
+
+        </form>
+
+        <div class="signup">
+            Already have an account?
+            <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+      document.getElementById("clearAllBtn").addEventListener("click", () => {
+        document.getElementById("signupForm").reset();
+      });
+    </script>
+</body>
+</html>

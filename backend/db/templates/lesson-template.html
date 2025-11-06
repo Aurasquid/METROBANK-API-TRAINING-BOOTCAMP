@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{lessonTitle}}</title>
+    <link rel="stylesheet" href="../basedashboard.css" />
+    <link rel="stylesheet" href="../CourseStyle.css" />
+</head>
+<body>
+    <header class="lesson-header">
+        <h1>{{lessonTitle}}</h1>
+        <p class="lesson-course">Course: {{courseTitle}}</p>
+    </header>
+
+    <main class="lesson-content">
+        <section>
+            <h2>Lesson Overview</h2>
+            <p>{{lessonDescription}}</p>
+        </section>
+
+        <section>
+            <h2>Learning Materials</h2>
+            <p>This section can include text, videos, or activities related to this topic.</p>
+        </section>
+
+        <section>
+            <h2>Summary</h2>
+            <p>Review the key concepts covered in this lesson before moving on to the next one.</p>
+        </section>
+
+        <button onclick="window.close()" class="btn-close">Close Lesson</button>
+    </main>
+</body>
+</html>

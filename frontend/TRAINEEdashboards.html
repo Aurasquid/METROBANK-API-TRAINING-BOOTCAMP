@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metrobank Training Bootcamp - Dashboard</title>
+<link rel="stylesheet" href="basedashboard.css">
+<link rel="stylesheet" href="TRAINEEdashboards.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+</head>
+<body>
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <img src="logo.png" alt="logo">
+        <h2>Trainee</h2>
+    </div>
+    <ul class="sidebar-links">
+        <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+        <li><a href="TRAINEEdashboards.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+        <li><a href="TRAINEEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+        <h4><span>Progress</span><div class="menu-separator"></div></h4>
+        <li><a href="TRAINEEprogress.html"><span class="material-symbols-outlined">trending_up</span>Progress</a></li>
+        <li><a href="TRAINEEachievements.html"><span class="material-symbols-outlined">workspace_premium</span>Achievements</a></li>
+        <h4><span>Account</span><div class="menu-separator"></div></h4>
+        <li><a href="TRAINEEsettings.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+        <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Log Out</a></li>
+    </ul>
+    <div class="user-account">
+        <div class="user-profile">
+            <img src="profile.png" alt="Profile Image">
+            <div class="user-detail">
+                <h3>Jordan Smith</h3>
+                <span>Learner</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<div class="main">
+    <header class="top-header">
+        <div class="header-title">Dashboard</div>
+        <form class="header-search" action="#" autocomplete="off">
+            <input type="search" placeholder="Search..." name="search">
+            <span class="material-symbols-outlined search-icon">search</span>
+        </form>
+        <div class="header-profile">
+            <button class="profile-btn" id="profileBtn" aria-haspopup="true" type="button">
+                <img src="profile.png" alt="Profile Image">
+                <span class="profile-name">Jordan Smith</span>
+                <span class="material-symbols-outlined">expand_more</span>
+            </button>
+            <div class="profile-menu" id="profileMenu">
+                <ul>
+                    <li><a href="#">View Profile</a></li>
+                    <li><a href="#">Settings</a></li>
+                    <li><a href="#">Help</a></li>
+                    <li><a href="mainlayout.html">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="bento-box">
+        <div class="bento-main">
+            <section class="bento-box courses-box">
+                <h2 class="bento-header">Courses</h2>
+                <div class="courses-carousel">
+                    <button class="carousel-btn left">&lt;</button>
+                    <div class="carousel-track">
+                        <!-- Courses will be inserted dynamically here -->
+                    </div>
+                    <button class="carousel-btn right">&gt;</button>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const carouselTrack = document.querySelector('.carousel-track');
+
+    try {
+        // Fetch all courses and users
+        const [coursesRes, usersRes] = await Promise.all([
+            fetch("http://localhost:3000/api/courses"),
+            fetch("http://localhost:3000/api/users")
+        ]);
+
+        const [courses, users] = await Promise.all([
+            coursesRes.json(),
+            usersRes.json()
+        ]);
+
+        if (!courses.length) {
+            carouselTrack.innerHTML = "<p style='color: gray;'>No courses available.</p>";
+            return;
+        }
+
+        courses.forEach(course => {
+            const instructor = users.find(u => u.userId === course.uploadedBy);
+
+            const card = document.createElement('div');
+            card.classList.add('course-card');
+            card.innerHTML = `
+                <img class="course-img" src="${course.image ? `http://localhost:3000${course.image}` : 'course.jpeg'}" alt="${course.title}">
+                <div class="progress-row">
+                    <div class="course-progress-bar-outer">
+                        <div class="course-progress-bar-inner" style="width: 0%"></div>
+                    </div>
+                    <span class="course-progress-percent">0%</span>
+                </div>
+                <div class="card-body">
+                    <h3 class="course-title">${course.title}</h3>
+                    <p class="course-desc">${course.description}</p>
+                    <div class="instructor-profile">
+                        <img src="profile.png" alt="Instructor" class="instructor-img">
+                        <span class="instructor-name">${instructor ? instructor.fullName : 'Unknown'}</span>
+                    </div>
+                </div>
+            `;
+
+            // Click the card to redirect to TRAINEEcourses.html with deep link
+            card.addEventListener('click', () => {
+                window.location.href = `TRAINEEcourses.html?courseId=${course.id}`;
+            });
+
+            carouselTrack.appendChild(card);
+        });
+
+        // Carousel buttons
+        const btnLeft = document.querySelector('.carousel-btn.left');
+        const btnRight = document.querySelector('.carousel-btn.right');
+        const card = carouselTrack.querySelector('.course-card');
+
+        function getCardWidth() {
+            if (!card) return 260;
+            const style = getComputedStyle(card);
+            return card.offsetWidth + parseInt(style.marginRight || 0);
+        }
+
+        btnLeft.addEventListener('click', () => {
+            carouselTrack.scrollBy({ left: -getCardWidth(), behavior: 'smooth' });
+        });
+        btnRight.addEventListener('click', () => {
+            carouselTrack.scrollBy({ left: getCardWidth(), behavior: 'smooth' });
+        });
+
+    } catch (err) {
+        console.error("Error loading courses:", err);
+        carouselTrack.innerHTML = "<p style='color: red;'>Failed to load courses.</p>";
+    }
+});
+</script>
+
+
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Dashboard</title>
+
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="ADMINStyle.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>Admin</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="ADMINdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+
+            <h4><span>User Management</span><div class="menu-separator"></div></h4>
+            <li><a href="ADMINaddUser.html"><span class="material-symbols-outlined">person_add</span>Add User</a></li>
+            <li><a href="ADMINarchive.html"><span class="material-symbols-outlined">archive</span>Archive</a></li>
+
+            <h4><span>System</span><div class="menu-separator"></div></h4>
+            <li><a href="ADMINsettings.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="top-header">
+            <div class="header-title">Dashboard</div>
+            <form class="header-search" autocomplete="off">
+                <input type="search" placeholder="Search users..." id="searchInput" />
+                <span class="material-symbols-outlined search-icon">search</span>
+            </form>
+
+            <div class="header-right">
+                <div class="header-profile">
+                    <button class="profile-btn" id="profileBtn" aria-haspopup="true" type="button">
+                        <img src="profile.png" alt="Profile Image" />
+                        <span id="headerUserName">ADMIN</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div class="profile-menu" id="profileMenu">
+                        <ul>
+                            <li><a href="#">View Profile</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="mainlayout.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Active User Table -->
+        <section class="activeUsers-panel">
+            <div class="panel-header-row">
+                <span class="panel-title">Active Users</span>
+                <button class="add-activeUsers-btn" id="addUserBtn">
+                    <span class="material-symbols-outlined">person_add</span>
+                    Add Users
+                </button>
+            </div>
+
+            <table class="activeUsers-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="activeUsersTableBody">
+                    <tr><td colspan="5" style="text-align:center;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <h2 id="modalTitle">Confirm Action</h2>
+            <p id="modalMessage">Are you sure you want to archive this user?</p>
+            <div class="modal-buttons">
+                <button class="btn cancel-btn" id="cancelBtn">Cancel</button>
+                <button class="btn confirm-btn" id="confirmBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- PROFILE DROPDOWN ---
+        document.getElementById("profileBtn").addEventListener("click", (e) => {
+            e.stopPropagation();
+            const menu = document.getElementById("profileMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        });
+        document.addEventListener("click", (e) => {
+            const menu = document.getElementById("profileMenu");
+            if (menu && !menu.contains(e.target)) menu.style.display = "none";
+        });
+
+        // --- MODAL LOGIC ---
+        const modalOverlay = document.getElementById("modalOverlay");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalMessage = document.getElementById("modalMessage");
+        const confirmBtn = document.getElementById("confirmBtn");
+        const cancelBtn = document.getElementById("cancelBtn");
+        let confirmCallback = null;
+
+        function showModal(title, message, onConfirm) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            confirmCallback = onConfirm;
+            modalOverlay.style.display = "flex";
+        }
+        function hideModal() {
+            modalOverlay.style.display = "none";
+        }
+        confirmBtn.addEventListener("click", () => {
+            if (confirmCallback) confirmCallback();
+            hideModal();
+        });
+        cancelBtn.addEventListener("click", hideModal);
+
+        // --- LOAD USERS ---
+        async function loadUsers() {
+            const tableBody = document.getElementById("activeUsersTableBody");
+            try {
+                const res = await fetch("http://localhost:3000/api/users");
+                if (!res.ok) throw new Error("Failed to fetch users.");
+
+                const users = await res.json();
+                const activeUsers = users.filter(u => !u.dateArchived);
+
+                if (activeUsers.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No active users found.</td></tr>`;
+                    return;
+                }
+
+                const uniqueUsers = Array.from(new Map(activeUsers.map(u => [u.userId, u])).values());
+                tableBody.innerHTML = "";
+
+                uniqueUsers.forEach(user => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                <td>${user.userId}</td>
+                <td>${user.fullName}</td>
+                <td>${user.email}</td>
+                <td>${user.userType}</td>
+                <td>
+                  <button class="archiveUser-btn" data-id="${user.userId}">Archive</button>
+                </td>`;
+                    tableBody.appendChild(row);
+                });
+            } catch (err) {
+                console.error("❌ Error loading users:", err);
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:red;">Failed to load users.</td></tr>`;
+            }
+        }
+
+        // --- ARCHIVE USER ---
+        document.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("archiveUser-btn")) {
+                const userId = e.target.getAttribute("data-id");
+                showModal("Archive User", `Are you sure you want to archive user ${userId}?`, async () => {
+                    try {
+                        const res = await fetch(`http://localhost:3000/api/users/${userId}/archive`, {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ dateArchived: new Date().toISOString() }),
+                        });
+                        if (!res.ok) throw new Error("Failed to archive user.");
+
+                        const data = await res.json();
+                        alert(`✅ ${data.message || `User ${userId} archived successfully.`}`);
+                        await loadUsers();
+                    } catch (err) {
+                        console.error("❌ Archive error:", err);
+                        alert("Failed to archive user.");
+                    }
+                });
+            }
+        });
+
+        // --- REDIRECT BUTTON ---
+        document.getElementById("addUserBtn").addEventListener("click", () => {
+            window.location.href = "ADMINaddUser.html";
+        });
+
+        document.addEventListener("DOMContentLoaded", loadUsers);
+    </script>
+</body>
+</html>

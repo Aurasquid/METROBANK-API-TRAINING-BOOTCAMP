@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Card Slider - No JS</title>
+
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    h2 {
+      padding-left: 20px;
+    }
+
+    .slider-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .nav-button {
+      background-color: #333;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin: 0 10px;
+      border-radius: 50%;
+      font-size: 24px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-button:hover {
+      background-color: #555;
+    }
+
+    .material-symbols-outlined {
+      font-size: 24px;
+    }
+
+    .slider-container {
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      display: flex;
+      scroll-behavior: smooth;
+      gap: 16px;
+      padding: 0 10px;
+    }
+
+    .card {
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+      width: 300px;
+      height: 200px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card img {
+      width: 80%;
+      border-radius: 8px;
+    }
+
+    .card h4 {
+      margin: 10px 0 5px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #555;
+      padding: 0 10px;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        width: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Card Slider Without JavaScript</h2>
+
+  <div class="slider-wrapper">
+    <a href="#card1" class="nav-button">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </a>
+
+    <div class="slider-container">
+      <div class="card" id="card1">
+        <img src="https://via.placeholder.com/150" alt="Card 1">
+        <h4>Card 1</h4>
+        <p>Short description here.</p>
+      </div>
+      <div class="card" id="card2">
+        <img src="https://via.placeholder.com/150" alt="Card 2">
+        <h4>Card 2</h4>
+        <p>Short description here.</p>
+      </div>
+      <div class="card" id="card3">
+        <img src="https://via.placeholder.com/150" alt="Card 3">
+        <h4>Card 3</h4>
+        <p>Short description here.</p>
+      </div>
+      <div class="card" id="card4">
+        <img src="https://via.placeholder.com/150" alt="Card 4">
+        <h4>Card 4</h4>
+        <p>Short description here.</p>
+      </div>
+      <div class="card" id="card5">
+        <img src="https://via.placeholder.com/150" alt="Card 5">
+        <h4>Card 5</h4>
+        <p>Short description here.</p>
+      </div>
+    </div>
+
+    <a href="#card5" class="nav-button">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </a>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Create New Lessons</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="newUploadStyles.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>SME</h2>
+        </div>
+
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+            <h4><span><b>Training Materials</b></span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+        <section class="lesson-form-section">
+            <div class="panel-header-row">
+                <button type="button" class="btn-box back-icon-btn" onclick="window.history.back()">
+                    <i class="material-icons">arrow_back</i>
+                </button>
+                <h2 class="form-title">Create New Lesson</h2> <!-- new lesson LABEL -->
+            </div>
+            <form id="lessonForm" enctype="multipart/form-data">
+
+                <label for="lessonTitle">Lesson Title</label>   <!-- TITLE -->
+                <input type="text" id="lessonTitle" name="lessonTitle" placeholder="Enter Title" required>
+
+                <label for="lessonDesc">Description</label> <!-- DESC -->
+                <textarea name="lessonDesc" id="lessonDesc" placeholder="Add any details for context, keywords, or instructions..." required></textarea>
+
+                <label for="lessonCourse">Course</label>   <!-- COURSE -->
+                <select id="lessonCourse" name="lessonCourse" required>
+                    <option value="">Select Course</option>
+                </select>
+
+                <label>Upload Content (Presentation/Video/Files)</label>  <!-- FILE -->
+                <div class="upload-row">
+                    <input type="file" id="lessonFiles" name="lessonFiles" multiple
+                           accept=".ppt,.pptx,.pdf,.doc,.docx,video/*,image/*" />
+                </div>
+
+                <ul id="fileList" style="margin-top:10px; font-size:14px; color:#333;"></ul>
+                <div class="attachment-info">
+                    Supported: ppt, pptx, pdf, doc, docx, videos, and images
+                </div>
+
+                <button type="submit" class="save-btn">Save Lesson</button>
+            </form>
+        </section>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let selectedFiles = [];
+
+            // --- Load Course Options ---
+            async function loadCourses() {
+                try {
+                    const res = await fetch("http://localhost:3000/api/courses");
+                    const courses = await res.json();
+                    const select = document.getElementById("lessonCourse");
+                    select.innerHTML = '<option value="">Select Course</option>';
+                    courses.forEach(c => {
+                        const opt = document.createElement("option");
+                        opt.value = c.id;
+                        opt.textContent = c.title;
+                        select.appendChild(opt);
+                    });
+                    console.log("✅ Courses loaded:", courses);
+                } catch (err) {
+                    console.error("❌ Error loading courses:", err);
+                    alert("Failed to load courses.");
+                }
+            }
+
+            // --- File Selection ---
+            document.getElementById("lessonFiles").addEventListener("change", function () {
+                const allowedExt = [".ppt", ".pptx", ".pdf", ".doc", ".docx"];
+                const newFiles = Array.from(this.files);
+
+                newFiles.forEach(file => {
+                    const ext = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+                    if (!allowedExt.includes(ext) && !file.type.startsWith("video/") && !file.type.startsWith("image/")) {
+                        alert(`⚠️ Unsupported file: ${file.name}`);
+                    } else if (!selectedFiles.some(sf => sf.name === file.name && sf.size === file.size)) {
+                        selectedFiles.push(file);
+                    }
+                });
+
+                renderFileList();
+                this.value = "";
+            });
+
+            // --- Render File List ---
+            function renderFileList() {
+                const list = document.getElementById("fileList");
+                list.innerHTML = "";
+                selectedFiles.forEach((file, i) => {
+                    const li = document.createElement("li");
+                    li.textContent = file.name;
+
+                    const btn = document.createElement("button");
+                    btn.textContent = "✕";
+                    btn.style.marginLeft = "8px";
+                    btn.style.border = "none";
+                    btn.style.background = "transparent";
+                    btn.style.cursor = "pointer";
+                    btn.style.color = "#c00";
+                    btn.onclick = () => {
+                        selectedFiles.splice(i, 1);
+                        renderFileList();
+                    };
+
+                    li.appendChild(btn);
+                    list.appendChild(li);
+                });
+            }
+
+            // --- Submit Form ---
+            document.getElementById("lessonForm").addEventListener("submit", async e => {
+                e.preventDefault();
+
+                const title = document.getElementById("lessonTitle").value.trim();
+                const desc = document.getElementById("lessonDesc").value.trim();
+                const course = document.getElementById("lessonCourse").value;
+                const uploadedBy = localStorage.getItem("userId") || "S1234";
+
+                if (!title || !course || selectedFiles.length === 0) {
+                    alert("⚠️ Please fill all required fields and upload at least one file.");
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append("lessonTitle", title);
+                formData.append("lessonDesc", desc);
+                formData.append("lessonCourse", course);
+                formData.append("uploadedBy", uploadedBy);
+                selectedFiles.forEach(file => formData.append("lessonFiles", file));
+
+                try {
+                    const res = await fetch("http://localhost:3000/api/lessons", {
+                        method: "POST",
+                        body: formData,
+                    });
+                    const data = await res.json();
+
+                    if (!res.ok) throw new Error(data.message || "Upload failed");
+
+                    alert("✅ Lesson created successfully!");
+                    console.log("📘 Lesson created:", data.lesson);
+
+                    // Reset after success
+                    e.target.reset();
+                    selectedFiles = [];
+                    renderFileList();
+
+                    // redirect back to main
+                    setTimeout(() => window.location.href = "SMEcourses.html", 1000);
+                } catch (err) {
+                    console.error("❌ Error uploading:", err);
+                    alert("Error uploading lesson. Please check console for details.");
+                }
+            });
+
+            loadCourses();
+        });
+    </script>
+</body>
+</html>

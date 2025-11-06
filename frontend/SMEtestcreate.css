@@ -1,0 +1,635 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+:root {
+    --primary: #161a2d;
+    --secondary: #19376D;
+    --accent: #4F52BA;
+    --hover: #819CFA;
+    --background: #F0F4FF;
+    --card: #FFFFFF;
+    --text: #22223B;
+    --muted-accent: #E7E9F5;
+    --border: #E9EAF1;
+    --input-bg: #f6f8fa;
+    --input-border: #cbd5e1;
+}
+
+/* BASE STYLES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--text);
+}
+
+/* MAIN LAYOUT */
+.main {
+    margin-left: var(--sidebar);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    transition: margin-left 0.4s cubic-bezier(.55, .08, .53, .84);
+}
+
+/* MAIN CONTENT CARD */
+.main-content-card {
+    margin: 40px 20px 40px;
+    min-width: 1200px;
+    min-height: 90vh;
+    background: var(--card);
+    border-radius: 16px;
+    box-shadow: 0 6px 28px rgba(22,26,45,0.10);
+    padding: 2rem 2.5rem 1.3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    transition: margin-left 0.4s cubic-bezier(.55,.08,.53,.84);
+}
+
+.sidebar:hover ~ .main-content-card {
+    margin-left: calc(var(--sidebar-expanded) + var(--main-gap));
+}
+
+/* HEADER SECTION */
+.assessment-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 0.6rem;
+}
+
+.assessment-title {
+    font-size: 1.5rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+/*  BUTTONS (Prev, Next, Save) */
+.prev-button,
+.next-button,
+.save-assessment-btn {
+    align-self: flex-start;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(79, 82, 186, 0.15);
+    transition: background 0.2s, transform 0.1s;
+}
+
+    .prev-button:hover,
+    .next-button:hover,
+    .save-assessment-btn:hover {
+        background: var(--hover);
+    }
+
+/* FORM ELEMENTS */
+.assessment-form-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 1.2rem;
+}
+
+.column {
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--primary);
+}
+
+input[type="text"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="number"],
+select,
+textarea {
+    padding: 9px 14px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--muted-accent);
+    background: #f8fafd;
+    color: var(--text);
+    width: 100%;
+    resize: vertical;
+    margin-bottom: 0.3rem;
+}
+
+/* QUESTION AREA + AI PANEL LAYOUT */
+.assessment-question-ai-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.question-area {
+    flex: 2 1 0;
+    background: #f8fafd;
+    border-radius: 12px;
+    box-shadow: 0 1px 7px rgba(22,26,45,0.10);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* QUESTION DETAILS */
+.question-row {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.question-number,
+.points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-weight: 600;
+}
+
+.question-textbox {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1.2rem;
+    font-weight: 600;
+}
+
+.ai-button-inside {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    padding: 7px 14px;
+    font-size: 15px;
+    border-radius: 6px;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 7px rgba(79,82,186,0.11);
+    transition: background 0.2s, box-shadow 0.15s;
+}
+
+    .ai-button-inside:hover {
+        background: var(--hover);
+    }
+
+.separator {
+    margin: 18px 0;
+    border: 0;
+    height: 1px;
+    background: var(--muted-accent);
+}
+
+/* ANSWER SECTION */
+.answer-type-row {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    font-size: 1rem;
+}
+
+.answer-input-row {
+    margin-top: 13px;
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    font-weight: 600;
+}
+
+.answer-type-row label {
+    font-weight: 600;
+    color: var(--primary);
+    min-width: 110px;
+}
+
+.answer-input-row textarea,
+.answer-input-row input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--muted-accent);
+}
+
+/* MULTIPLE CHOICE SECTION */
+.mcq-left, .mcq-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+}
+
+#mcqInputs {
+    display: none;
+    flex-direction: column;
+    gap: 0.9rem;
+    background: #f8fafd;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--muted-accent);
+    box-shadow: 0 2px 6px rgba(22, 26, 45, 0.05);
+}
+
+#choicesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.choice-input-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+}
+
+.choice-input {
+    flex: 1;
+    padding: 9px 12px;
+    font-size: 0.95rem;
+    border-radius: 6px;
+    border: 1px solid var(--muted-accent);
+    background: var(--input-bg);
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+    .choice-input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(79, 82, 186, 0.15);
+        outline: none;
+    }
+
+/* Buttons inside MCQ */
+#addChoiceBtn,
+.remove-choice {
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.1s;
+}
+
+#addChoiceBtn {
+    align-self: flex-start;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.95rem;
+    padding: 8px 16px;
+    box-shadow: 0 2px 6px rgba(79, 82, 186, 0.15);
+}
+
+    #addChoiceBtn:hover {
+        background: var(--hover);
+        transform: translateY(-1px);
+    }
+
+.remove-choice {
+    background: #e74c3c;
+    color: #fff;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 5px rgba(231, 76, 60, 0.15);
+}
+
+    .remove-choice:hover {
+        background: #c0392b;
+        transform: translateY(-1px);
+    }
+
+/* AI SECTION */
+.ai-section {
+    margin-top: 1.5rem;
+    background: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--muted-accent);
+    padding: 1.5rem;
+}
+
+    .ai-section h3 {
+        margin-bottom: 0.8rem;
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.15rem;
+    }
+
+/* AI CHAT PANEL */
+.ai-column {
+    flex: 0 1 30px;
+    min-width: 400px;
+    max-width: 500px;
+    display: flex;
+}
+
+.ai-helper-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--card);
+    border: 1px solid var(--muted-accent);
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(22,26,45,0.10);
+    min-height: 320px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* CHAT CONTENT */
+.ai-chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 15px;
+    background: #f8fafd;
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-accent) var(--background);
+    min-height: 0;
+}
+
+    .ai-chat-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .ai-chat-container::-webkit-scrollbar-thumb {
+        background-color: var(--muted-accent);
+        border-radius: 8px;
+    }
+
+/* CHAT MESSAGES */
+.ai-messages {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ai-message {
+    font-size: 0.95rem;
+    background: var(--card);
+    border-radius: 8px;
+    padding: 9px 12px;
+    border: 1px solid var(--muted-accent);
+    max-width: 85%;
+    line-height: 1.45;
+    box-shadow: 0 1px 3px rgba(22,26,45,0.05);
+}
+
+    .ai-message.user {
+        align-self: flex-end;
+        background: #e5e9ff;
+        border-color: #cdd3ff;
+    }
+
+    .ai-message.bot {
+        align-self: flex-start;
+        background: #f4f5ff;
+        border-color: #dee0ff;
+    }
+
+/* CHAT CONTROLS */
+.ai-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.7rem;
+    padding: 10px 14px;
+    border-top: 1px solid var(--muted-accent);
+    background: var(--card);
+}
+
+    .ai-controls label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .ai-controls select {
+        flex: 1;
+        padding: 7px 10px;
+        font-size: 0.9rem;
+        border-radius: 6px;
+        border: 1px solid var(--muted-accent);
+        background: var(--card);
+        color: var(--primary);
+        cursor: pointer;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .ai-controls select:hover,
+        .ai-controls select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79,82,186,0.12);
+        }
+
+/* INPUT AREA */
+.ai-input {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border-top: 1px solid var(--muted-accent);
+    background: var(--card);
+    padding: 10px;
+}
+
+    .ai-input input[type="text"] {
+        flex: 1;
+        padding: 8px 10px;
+        border: 1px solid var(--muted-accent);
+        border-radius: 6px;
+        font-size: 0.9rem;
+        background: var(--input-bg);
+        color: var(--primary);
+        outline: none;
+        transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .ai-input input[type="text"]:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(79,82,186,0.12);
+        }
+
+.ai-sendbutton {
+    padding: 8px 16px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 6px rgba(79,82,186,0.15);
+}
+
+    .ai-sendbutton:hover {
+        background: var(--hover);
+        transform: translateY(-1px);
+    }
+
+/* ADD / DELETE QUESTION BUTTONS */
+.new-question-button-container,
+.delete-question-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.3rem;
+}
+
+.new-question-button,
+.delete-question-button {
+    display: flex;
+    align-items: center;
+    padding: 12px 32px;
+    background: var(--accent);
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 2px 7px rgba(79,82,186,0.13);
+    transition: background 0.2s;
+}
+
+    .new-question-button:hover,
+    .delete-question-button:hover {
+        background: var(--hover);
+    }
+
+.plus-sign,
+.minus-sign {
+    font-size: 1.35rem;
+    margin-right: 9px;
+}
+/* --- FIX MCQ SPACING AND VISIBILITY --- */
+#mcqInputs {
+    display: none;
+}
+
+#textboxInputs,
+#codeInputs {
+    display: none;
+}
+
+/* When visible (JS toggles this class) */
+.active-section {
+    display: flex !important;
+    flex-direction: column;
+}
+
+/* Fix spacing between Add Choice and Correct Answer */
+#choicesContainer {
+    margin-bottom: 1rem;
+}
+
+/* Adjust question container layout to stay consistent */
+.question-area {
+    min-height: 600px;
+    justify-content: flex-start;
+}
+
+/* Make the Add Choice button align better visually */
+#addChoiceBtn {
+    margin-top: 0.5rem;
+    margin-bottom: 0.8rem;
+}
+
+/* Slightly separate "Correct Answer" section */
+.correct-answer-group {
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed var(--muted-accent);
+}
+
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1100px) {
+    .main-content-card {
+        margin-left: calc(var(--sidebar) + 16px);
+        margin-right: 16px;
+        max-width: 98vw;
+        padding: 1rem 2vw;
+    }
+
+    .sidebar:hover ~ .main-content-card {
+        margin-left: calc(var(--sidebar-expanded) + 16px);
+    }
+}
+
+@media (max-width: 900px) {
+    :root {
+        --sidebar: 70px;
+        --sidebar-expanded: 70px;
+        --main-gap: 12px;
+    }
+
+    .main-content-card,
+    .sidebar:hover ~ .main-content-card {
+        margin-left: calc(var(--sidebar) + var(--main-gap));
+        margin-right: 8px;
+        padding: 1.2rem 1vw;
+        max-width: 98vw;
+    }
+
+    .assessment-form-row,
+    .assessment-question-ai-row {
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .ai-helper-panel {
+        flex: 1 1 auto;
+        width: 100%;
+        max-height: 55vh;
+    }
+}
+
+@media (max-width: 1200px) {
+    .main-content-card,
+    .sidebar:hover ~ .main-content-card {
+        margin: 0;
+        max-width: 100vw;
+        border-radius: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .ai-helper-panel {
+        max-height: 50vh;
+    }
+
+    .ai-controls label {
+        display: none;
+    }
+
+    .ai-sendbutton {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+}

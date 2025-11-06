@@ -1,0 +1,34 @@
+# API Basics
+API stands for Application Programming Interface. It allows different software applications to communicate with each other.
+
+# Types of APIs
+- REST API: Uses HTTP requests (GET, POST, PUT, DELETE). Data is usually in JSON format.
+- SOAP API: Uses XML messages for exchanging data, more rigid structure.
+- GraphQL API: Clients request only the data they need in a single query.
+
+# Authentication Methods
+- API Key: Unique key to access an API.
+- OAuth 2.0: Token-based authentication protocol for secure access.
+- Basic Auth: Username and password sent with each request.
+
+# HTTP Status Codes
+- 200: OK (request succeeded)
+- 201: Created (new resource created)
+- 400: Bad Request (invalid request)
+- 401: Unauthorized (authentication required)
+- 403: Forbidden (access denied)
+- 404: Not Found (endpoint does not exist)
+- 500: Internal Server Error (server failed)
+
+# API Endpoints Examples
+- GET /users: Retrieve a list of users
+- POST /users: Create a new user
+- PUT /users/{id}: Update user information
+- DELETE /users/{id}: Remove a user
+
+# Best Practices
+- Version your API (e.g., v1, v2)
+- Use proper HTTP status codes for errors and successes
+- Provide clear error messages
+- Limit request rate to prevent abuse (rate limiting)
+- Secure sensitive data (HTTPS, authentication)

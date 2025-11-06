@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Archive</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="ADMINStyle.css" />
+
+    <!-- Icons & Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>Admin</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="ADMINdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+
+            <h4><span>User Management</span><div class="menu-separator"></div></h4>
+            <li><a href="ADMINaddUser.html"><span class="material-symbols-outlined">person_add</span>Add User</a></li>
+            <li><a href="ADMINarchive.html"><span class="material-symbols-outlined">archive</span>Archive</a></li>
+
+            <h4><span>System</span><div class="menu-separator"></div></h4>
+            <li><a href="ADMINsettings.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main">
+        <header class="top-header">
+            <div class="header-title">Archive</div>
+            <form class="header-search" autocomplete="off">
+                <input type="search" placeholder="Search users..." id="searchInput" />
+                <span class="material-symbols-outlined search-icon">search</span>
+            </form>
+
+            <div class="header-right">
+                <div class="header-profile">
+                    <button class="profile-btn" id="profileBtn" aria-haspopup="true" type="button">
+                        <img src="profile.png" alt="Profile Image" />
+                        <span id="headerUserName">ADMIN</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div class="profile-menu" id="profileMenu">
+                        <ul>
+                            <li><a href="#">View Profile</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="mainlayout.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Archived Users Table -->
+        <section class="archivedUsers-panel">
+            <div class="panel-header-row">
+                <span class="panel-title">Archived Users</span>
+                <div class="panel-header-actions">
+                    <button class="restoreAllUser-btn" id="restoreAllBtn">
+                        <span class="material-symbols-outlined">restore</span> Restore All
+                    </button>
+                    <button class="deleteAllUser-btn" id="deleteAllBtn">
+                        <span class="material-symbols-outlined">delete</span> Delete All
+                    </button>
+                </div>
+            </div>
+
+            <table class="archivedUsers-table">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Date Archived</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="archivedUsersTableBody">
+                    <tr><td colspan="6" style="text-align:center;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Confirmation Modal -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <h2 id="modalTitle">Confirm Action</h2>
+                <p id="modalMessage">Are you sure?</p>
+                <div class="modal-buttons">
+                    <button id="confirmBtn" class="confirm-btn">Confirm</button>
+                    <button id="cancelBtn" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const tableBody = document.getElementById("archivedUsersTableBody");
+            const modalOverlay = document.getElementById("modalOverlay");
+            const modalTitle = document.getElementById("modalTitle");
+            const modalMessage = document.getElementById("modalMessage");
+            const confirmBtn = document.getElementById("confirmBtn");
+            const cancelBtn = document.getElementById("cancelBtn");
+            const restoreAllBtn = document.getElementById("restoreAllBtn");
+            const deleteAllBtn = document.getElementById("deleteAllBtn");
+
+            let confirmCallback = null;
+
+            // === Modal Functions ===
+            function showModal(title, message, onConfirm) {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                confirmCallback = onConfirm;
+                modalOverlay.style.display = "flex";
+            }
+
+            function hideModal() {
+                modalOverlay.style.display = "none";
+            }
+
+            confirmBtn.addEventListener("click", () => {
+                if (confirmCallback) confirmCallback();
+                hideModal();
+            });
+
+            cancelBtn.addEventListener("click", hideModal);
+
+            // === Load Archived Users ===
+            async function loadArchivedUsers() {
+                try {
+                    const res = await fetch("http://localhost:3000/api/archived-users");
+                    if (!res.ok) throw new Error("Failed to fetch archived users.");
+                    const archivedUsers = await res.json();
+                    console.log("Archived users fetched:", archivedUsers);
+
+                    // No archived users
+                    if (!Array.isArray(archivedUsers) || archivedUsers.length === 0) {
+                        tableBody.innerHTML = `
+              <tr><td colspan="6" style="text-align:center;">No archived users found.</td></tr>`;
+                        return;
+                    }
+
+                    // Display table rows
+                    tableBody.innerHTML = "";
+                    archivedUsers.forEach(user => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+              <td>${user.userId}</td>
+              <td>${user.fullName}</td>
+              <td>${user.email}</td>
+              <td>${user.userType}</td>
+              <td>${user.dateArchived ? new Date(user.dateArchived).toLocaleDateString() : "—"}</td>
+              <td>
+                <button class="restoreUser-btn" data-id="${user.userId}">Restore</button>
+                <button class="deleteUser-btn" data-id="${user.userId}">Delete</button>
+              </td>`;
+                        tableBody.appendChild(row);
+                    });
+                } catch (err) {
+                    console.error("❌ Error loading archived users:", err);
+                    tableBody.innerHTML = `
+            <tr><td colspan="6" style="text-align:center;color:red;">Failed to load archived users.</td></tr>`;
+                }
+            }
+
+            // === Restore a Single User ===
+            document.addEventListener("click", async (e) => {
+                if (e.target.classList.contains("restoreUser-btn")) {
+                    const userId = e.target.dataset.id;
+                    showModal("Restore User", `Restore user ${userId}?`, async () => {
+                        try {
+                            const res = await fetch(`http://localhost:3000/api/archived-users/restore/${userId}`, {
+                                method: "PATCH",
+                            });
+                            const data = await res.json();
+                            if (!res.ok) throw new Error(data.message);
+                            alert(`✅ ${data.message}`);
+                            loadArchivedUsers();
+                        } catch (err) {
+                            console.error("❌ Restore error:", err);
+                            alert("Failed to restore user.");
+                        }
+                    });
+                }
+
+                // === Delete a Single User ===
+                if (e.target.classList.contains("deleteUser-btn")) {
+                    const userId = e.target.dataset.id;
+                    showModal("Delete User", `Permanently delete user ${userId}?`, async () => {
+                        try {
+                            const res = await fetch(`http://localhost:3000/api/archived-users/${userId}`, {
+                                method: "DELETE",
+                            });
+                            const data = await res.json();
+                            if (!res.ok) throw new Error(data.message);
+                            alert(`🗑️ ${data.message}`);
+                            loadArchivedUsers();
+                        } catch (err) {
+                            console.error("❌ Delete error:", err);
+                            alert("Failed to delete user.");
+                        }
+                    });
+                }
+            });
+
+            // === Restore All Users ===
+            restoreAllBtn.addEventListener("click", () => {
+                showModal("Restore All", "Restore all archived users?", async () => {
+                    try {
+                        const res = await fetch("http://localhost:3000/api/archived-users/restore-all", {
+                            method: "PATCH",
+                        });
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.message);
+                        alert(`✅ ${data.message || "All users restored successfully."}`);
+                        loadArchivedUsers();
+                    } catch (err) {
+                        console.error("❌ Restore all error:", err);
+                        alert("Failed to restore all users.");
+                    }
+                });
+            });
+
+            // === Delete All Users ===
+            deleteAllBtn.addEventListener("click", () => {
+                showModal("Delete All", "Permanently delete all archived users?", async () => {
+                    try {
+                        const res = await fetch("http://localhost:3000/api/archived-users/delete-all", {
+                            method: "DELETE",
+                        });
+                        const data = await res.json();
+                        if (!res.ok) throw new Error(data.message);
+                        alert(`🗑️ ${data.message || "All archived users deleted permanently."}`);
+                        loadArchivedUsers();
+                    } catch (err) {
+                        console.error("❌ Delete all error:", err);
+                        alert("Failed to delete all users.");
+                    }
+                });
+            });
+
+            // === Initialize on page load ===
+            await loadArchivedUsers();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Courses</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="CourseStyle.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>SME</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+            <h4><span><b>Training Materials</b></span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <div class="main">
+        <!-- Top bar -->
+        <header class="top-header">
+            <div class="header-title">Courses</div>
+            <form class="header-search" action="#" autocomplete="off">
+                <input type="search" placeholder="Search courses..." name="search" />
+                <span class="material-symbols-outlined search-icon">search</span>
+            </form>
+
+            <div class="header-profile">
+                <button class="profile-btn" id="profileBtn" aria-haspopup="true" type="button">
+                    <img src="profile.png" alt="Profile Image" />
+                    <span class="profile-name">Eva Murphy</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+
+                <div class="profile-menu" id="profileMenu">
+                    <ul>
+                        <li><a href="#">View Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="mainlayout.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <div class="course-panel">
+            <div class="panel-header-row">
+                <span class="panel-title">Courses</span>
+                <div class="panel-actions">
+                    <button class="btn-box new-course-btn" id="newCourseBtn">
+                        <span class="material-symbols-outlined button-icon">add</span>
+                        <span class="button-text">New Course</span>
+                    </button>
+
+                    <button class="btn-box delete-course-btn" id="deleteCourseBtn">
+                        <span class="material-symbols-outlined button-icon">delete</span>
+                        <span class="button-text">Delete Course</span>
+                    </button>
+                </div>
+            </div>
+            <div class="course-accordion" id="course-accordion-card"></div>
+        </div>
+    </div>
+
+    
+    <script>
+        async function loadCourses() {
+            try {
+                const res = await fetch("http://localhost:3000/api/courses");
+                const courses = await res.json();
+
+                const lessonsRes = await fetch("http://localhost:3000/api/lessons");
+                const lessons = await lessonsRes.json();
+
+                const assessmentsRes = await fetch("http://localhost:3000/api/assessments");
+                const assessments = await assessmentsRes.json();
+
+                const container = document.getElementById("course-accordion-card");
+                container.innerHTML = "";
+
+                courses.forEach(course => {
+                    const courseLessons = lessons.filter(l => l.courseId === course.id);
+                    const courseAssessments = assessments.filter(a => a.courseId === course.id);
+
+                    const lessonList = courseLessons.length
+                        ? courseLessons.map(l => `<li onclick="redirectToLesson(${l.id})">${l.title}</li>`).join("")
+                        : "<li>No lessons yet.</li>";
+
+                    const assessmentList = courseAssessments.length
+                        ? courseAssessments.map(a => `<li onclick="redirectToAssessment(${a.id})">${a.title}</li>`).join("")
+                        : "<li>No assessments yet.</li>";
+
+                    const card = `
+                                <div class="course-accordion-card" data-course-id="${course.id}">
+                                  <button class="course-header-btn" aria-expanded="false">
+                                    <img src="${course.image ? `http://localhost:3000${course.image}` : 'course.jpeg'}"
+                                         class="course-img" alt="${course.title}">
+                                    <div class="course-summary">
+                                      <div class="course-title">${course.title}</div>
+                                      <div class="course-description">${course.description || ''}</div>
+                                    </div>
+                                    <span class="material-symbols-outlined accordion-chevron">expand_more</span>
+                                  </button>
+
+                                  <div class="course-details" hidden>
+                                    <div class="course-lessons">
+                                      <div class="course-section-title">Lessons</div>
+                                      <ul>${lessonList}</ul>
+                                      <div class="accordion-actions">
+                                        <a href="SMEnewLesson.html?courseId=${course.id}" class="add-course-btn">Add Lesson</a>
+                                      </div>
+                                    </div>
+
+                                    <div class="course-assessments">
+                                      <div class="course-section-title">Assessments</div>
+                                      <ul>${assessmentList}</ul>
+                                      <div class="accordion-actions">
+                                          <a href="SMEcreateassess.html?courseId=${course.id}" class="add-assess-btn">Add Assessment</a></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              `;
+
+                    container.innerHTML += card;
+                });
+
+                document.querySelectorAll(".course-header-btn").forEach(btn => {
+                    btn.addEventListener("click", () => toggleAccordion(btn));
+                });
+
+            } catch (err) {
+                console.error("Error loading courses:", err);
+            }
+        }
+
+        function toggleAccordion(button) {
+            const expanded = button.getAttribute("aria-expanded") === "true";
+            document.querySelectorAll(".course-header-btn").forEach(b => {
+                b.setAttribute("aria-expanded", "false");
+                b.nextElementSibling.hidden = true;
+            });
+            if (!expanded) {
+                button.setAttribute("aria-expanded", "true");
+                button.nextElementSibling.hidden = false;
+            }
+        }
+
+        function redirectToLesson(id) {
+            window.location.href = `lessonView.html?lessonId=${id}`;
+        }
+
+        function redirectToAssessment(id) {
+            window.location.href = `assessmentView.html?assessmentId=${id}`;
+        }
+
+        window.onload = loadCourses;
+        // DELETE MODE
+        let deleteMode = false;
+
+        document.getElementById("deleteCourseBtn").addEventListener("click", (e) => {
+            e.preventDefault();
+            deleteMode = !deleteMode;
+
+            const cards = document.querySelectorAll(".accordion-card");
+            cards.forEach(card => {
+                if (deleteMode) {
+                    card.classList.add("delete-select");
+                    card.addEventListener("click", handleDeleteSelection);
+                } else {
+                    card.classList.remove("delete-select");
+                    card.removeEventListener("click", handleDeleteSelection);
+                }
+            });
+
+            const btn = e.currentTarget;
+            btn.querySelector(".button-text").textContent = deleteMode ? "Cancel Delete" : "Delete Course";
+        });
+
+        function handleDeleteSelection(event) {
+            const card = event.currentTarget;
+            const courseTitle = card.querySelector(".accordion-title").textContent;
+            const courseId = card.dataset.courseId;
+            showDeletePopup(courseId, courseTitle);
+        }
+
+        function showDeletePopup(courseId, title) {
+            const overlay = document.createElement("div");
+            overlay.classList.add("delete-popup-overlay");
+            overlay.innerHTML = `
+                      <div class="delete-popup">
+                        <h3>Delete Course</h3>
+                        <p>Are you sure you want to delete <b>${title}</b>?</p>
+                        <div class="popup-actions">
+                          <button class="confirm">Delete</button>
+                          <button class="cancel">Cancel</button>
+                        </div>
+                      </div>
+                    `;
+            document.body.appendChild(overlay);
+
+            overlay.querySelector(".cancel").addEventListener("click", () => overlay.remove());
+            overlay.querySelector(".confirm").addEventListener("click", async () => {
+                try {
+                    await fetch(`http://localhost:3000/api/courses/${courseId}`, { method: "DELETE" });
+                    overlay.remove();
+                    deleteMode = false;
+                    document.getElementById("deleteCourseBtn").querySelector(".button-text").textContent = "Delete Course";
+                    loadCourses(); // Refresh list
+                } catch (err) {
+                    console.error("Error deleting course:", err);
+                }
+            });
+        }
+        // --- REDIRECT BUTTONS ---
+        document.getElementById("newCourseBtn").addEventListener("click", () => {
+            window.location.href = "SMEnewCourse.html";
+        });
+    </script>
+</body>
+</html>

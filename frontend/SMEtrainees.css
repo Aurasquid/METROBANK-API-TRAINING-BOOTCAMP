@@ -1,0 +1,304 @@
+﻿        :root {
+            --primary: #161a2d;
+            --secondary: #19376D;
+            --accent: #4F52BA;
+            --hover: #819CFA;
+            --background: #F0F4FF;
+            --card: #FFFFFF;
+            --text: #22223B;
+            --muted-accent: #E7E9F5;
+        }
+        /* BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        /* MAIN AREA */
+        body {
+            min-height: 100vh;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        /* MAIN AREA */
+        .main {
+            padding: 30px 5vw 40px 5vw;
+            background: var(--background);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .trainees-panel {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 3px 18px rgba(22, 26, 45, 0.08);
+            padding: 2rem;
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+            align-self: center;
+        }
+
+        .panel-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .add-trainee-btn {
+            background: var(--accent);
+            color: var(--card);
+            font-weight: 600;
+            font-size: 1em;
+            border: none;
+            border-radius: 8px;
+            padding: 0.6em 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            transition: background 0.25s ease;
+        }
+
+            .add-trainee-btn:hover {
+                background: var(--hover);
+                color: var(--primary);
+            }
+
+        .trainee-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(22, 26, 45, 0.08);
+        }
+
+            .trainee-table thead {
+                background: var(--muted-accent);
+                color: var(--secondary);
+                font-weight: 600;
+            }
+
+            .trainee-table th,
+            .trainee-table td {
+                padding: 0.9em 1em;
+                text-align: left;
+                border-bottom: 1px solid var(--muted-accent);
+                font-size: 0.95em;
+            }
+            .trainee-table tbody tr:hover {
+                background: #f8f9ff;
+            }
+        .status-pill {
+            font-size: 0.9em;
+            font-weight: 600;
+            border-radius: 17px;
+            padding: 0.3em 1em;
+            display: inline-block;
+        }
+
+            .status-pill.complete {
+                background: #baf7d5;
+                color: #25b858;
+            }
+
+            .status-pill.inprogress {
+                background: #fdf8b3;
+                color: #db9e28;
+            }
+
+            .status-pill.notstarted {
+                background: #ffe3e3;
+                color: #cc464c;
+            }
+
+        .assign-view-btn {
+            background: var(--accent);
+            color: var(--card);
+            border: none;
+            border-radius: 6px;
+            padding: 0.3em 1em;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+            .assign-view-btn:hover {
+                background: var(--hover);
+                color: var(--primary);
+            }
+
+        .assign-course-btn {
+            background: var(--secondary);
+            color: var(--card);
+            border: none;
+            border-radius: 6px;
+            padding: 0.3em 1em;
+            cursor: pointer;
+            font-weight: 600;
+        }
+            .assign-course-btn:hover {
+                background: var(--accent);
+                color: var(--primary);
+            }
+
+        .stats-summary {
+            display: flex;
+            gap: 2rem;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--muted-accent);
+            font-size: 1.05em;
+            font-weight: 600;
+            color: var(--primary);
+        }
+            .stats-summary div {
+                font-size: 1.05em;
+                font-weight: 600;
+                color: var(--primary);
+            }
+
+            .stats-summary span.value {
+                font-weight: 700;
+                margin-left: 5px;
+            }
+
+        .value-accent {
+            color: var(--accent);
+        }
+
+        .value-secondary {
+            color: var(--secondary);
+        }
+
+        .value-green {
+            color: #4ba876;
+        }
+/* POP UP MSG */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-box {
+    background: var(--card, #fff);
+    border-radius: 14px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+    width: 460px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* changed from space-between */
+    align-items: stretch;
+    text-align: center;
+    animation: popIn 0.25s ease;
+    gap: 0.8rem; /* tighter spacing between elements */
+}
+.modal-content {
+    margin-top: 0.5rem; /* bring dropdown closer to heading */
+    margin-bottom: 1.5rem; /* reduce space before buttons */
+}
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-box h2 {
+    margin-bottom: 0.5rem;
+    color: #1d1d1f;
+    font-size: 1.4rem;
+}
+
+.modal-box p {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+/* Course Label + Dropdown */
+.modal-box label {
+    font-weight: 600;
+    color: #333;
+    display: block;
+    text-align: left;
+    margin-bottom: 0.4rem;
+}
+
+.modal-box select {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1.5px solid #ccc;
+    font-size: 0.95rem;
+    background: #fafafa;
+    transition: 0.25s ease;
+}
+
+    .modal-box select:focus {
+        border-color: var(--accent, #4f46e5);
+        outline: none;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+/* Buttons */
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-btn {
+    background: #e5e5e5;
+    color: #333;
+}
+
+    .cancel-btn:hover {
+        background: #d4d4d4;
+    }
+
+.confirm-btn {
+    background: var(--accent, #4f46e5);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
+}
+
+    .confirm-btn:hover {
+        background: var(--hover, #4338ca);
+        transform: translateY(-1px);
+    }

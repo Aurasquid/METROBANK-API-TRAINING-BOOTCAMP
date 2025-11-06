@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Trainees</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="SMEtrainees.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400;500;600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>SME</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html" class="active"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+            <h4><span>Training Materials</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+        <header class="top-header">
+            <div class="header-title">Trainees</div>
+            <form class="header-search" id="searchForm">
+                <input type="search" id="searchInput" placeholder="Search trainee..." />
+                <span class="material-symbols-outlined search-icon">search</span>
+            </form>
+            <div class="header-profile">
+                <button class="profile-btn" id="profileBtn">
+                    <img src="profile.png" alt="Profile Image" />
+                    <span class="profile-name">Eva Murphy</span>
+                    <span class="material-symbols-outlined">expand_more</span>
+                </button>
+                <div class="profile-menu" id="profileMenu">
+                    <ul>
+                        <li><a href="#">View Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="mainlayout.html">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Trainee Table + Stats -->
+        <section class="trainees-panel">
+            <div class="panel-header-row">
+                <span class="panel-title">Trainee Progress & Assignment</span>
+                <button class="add-trainee-btn" id="addTraineeBtn" >
+                    <span class="material-symbols-outlined">person_add</span>
+                    Add Trainee
+                </button>
+            </div>
+
+            <table class="trainee-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="traineeTableBody">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+
+            <div class="stats-summary">
+                <div>Total Trainees: <span class="value value-accent" id="totalTrainees">0</span></div>
+                <div>Average Progress: <span class="value value-secondary" id="avgProgress">0%</span></div>
+                <div>Courses Assigned: <span class="value value-green" id="coursesAssigned">0</span></div>
+            </div>
+        </section>
+        <!-- Confirmation Modal -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal-box">
+                <h2 id="modalTitle">Re-assign Course for Jordan Smith</h2>
+                <p id="modalMessage">Select a new course to assign.</p>
+
+                <div class="modal-content">
+                    <select id="reassignCourse" name="reassignCourse" required>
+                        <option value="">Select Course</option>
+                        <option value="rest">RESTful API Design</option>
+                        <option value="api">API Integration with JavaScript</option>
+                    </select>
+                </div>
+
+                <div class="modal-buttons">
+                    <button class="btn cancel-btn" id="cancelBtn">Cancel</button>
+                    <button class="btn confirm-btn" id="confirmBtn">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", async () => {
+                const tableBody = document.getElementById("traineeTableBody");
+                const totalTrainees = document.getElementById("totalTrainees");
+                const avgProgress = document.getElementById("avgProgress");
+                const coursesAssigned = document.getElementById("coursesAssigned");
+
+                // Load assigned trainees
+                async function loadAssignedTrainees() {
+                    try {
+                        const res = await fetch("http://localhost:3000/api/assigned");
+                        if (!res.ok) throw new Error("Failed to fetch assigned trainees.");
+                        const assignedList = await res.json();
+
+                        if (!Array.isArray(assignedList) || assignedList.length === 0) {
+                            tableBody.innerHTML = `
+                  <tr><td colspan="6" style="text-align: center;">No assigned trainees found.</td></tr>
+                `;
+                            totalTrainees.textContent = 0;
+                            avgProgress.textContent = "0%";
+                            coursesAssigned.textContent = 0;
+                            return;
+                        }
+
+                        tableBody.innerHTML = "";
+                        let totalProgress = 0;
+
+                        assignedList.forEach((item) => {
+                            const row = document.createElement("tr");
+
+                            let statusClass = "notstarted";
+                            if (item.status === "In Progress") statusClass = "inprogress";
+                            else if (item.status === "Complete") statusClass = "complete";
+
+                            row.innerHTML = `
+                  <td>${item.fullName}</td>
+                  <td>${item.email}</td>
+                  <td>${item.courseTitle}</td>
+                  <td><span class="status-pill ${statusClass}">${item.status}</span></td>
+                  <td>${item.progress}</td>
+                  <td>
+                    <button class="assign-view-btn">View</button>
+                    <button class="assign-course-btn" data-userid="${item.userId}" data-name="${item.fullName}" data-email="${item.email}">Re-assign</button>
+                  </td>
+                `;
+                            tableBody.appendChild(row);
+
+                            // Average progress calc
+                            const progressNum = parseInt(item.progress.replace("%", "")) || 0;
+                            totalProgress += progressNum;
+                        });
+
+                        totalTrainees.textContent = assignedList.length;
+                        const avg = Math.round(totalProgress / assignedList.length);
+                        avgProgress.textContent = `${avg}%`;
+                        coursesAssigned.textContent = assignedList.length;
+
+                    } catch (err) {
+                        console.error("❌ Error loading assigned trainees:", err);
+                        tableBody.innerHTML = `
+                <tr><td colspan="6" style="text-align: center; color: red;">Failed to load trainee assignments.</td></tr>
+              `;
+                    }
+                }
+
+                // Load available courses for dropdown
+                async function loadCourses() {
+                    try {
+                        const res = await fetch("http://localhost:3000/api/courses");
+                        if (!res.ok) throw new Error("Failed to load courses.");
+                        const courses = await res.json();
+                        const courseSelect = document.getElementById("reassignCourse");
+                        courseSelect.innerHTML = `<option value="">Select Course</option>`;
+                        courses.forEach(course => {
+                            const opt = document.createElement("option");
+                            opt.value = course.courseId;
+                            opt.textContent = course.courseTitle;
+                            courseSelect.appendChild(opt);
+                        });
+                    } catch (err) {
+                        console.error("❌ Error loading courses:", err);
+                    }
+                }
+
+                // --- MODAL LOGIC ---
+                const modalOverlay = document.getElementById("modalOverlay");
+                const modalTitle = document.getElementById("modalTitle");
+                const modalMessage = document.getElementById("modalMessage");
+                const confirmBtn = document.getElementById("confirmBtn");
+                const cancelBtn = document.getElementById("cancelBtn");
+                let confirmCallback = null;
+
+                function showModal(title, message, onConfirm) {
+                    modalTitle.textContent = title;
+                    modalMessage.textContent = message;
+                    confirmCallback = onConfirm;
+                    modalOverlay.style.display = "flex";
+                }
+
+                function hideModal() {
+                    modalOverlay.style.display = "none";
+                }
+
+                confirmBtn.addEventListener("click", () => {
+                    if (confirmCallback) confirmCallback();
+                    hideModal();
+                });
+                cancelBtn.addEventListener("click", hideModal);
+
+                // --- HANDLE REASSIGN BUTTON ---
+                document.addEventListener("click", async (e) => {
+                    if (e.target.classList.contains("assign-course-btn")) {
+                        const traineeId = e.target.dataset.userid;
+                        const traineeName = e.target.dataset.name;
+                        const traineeEmail = e.target.dataset.email;
+
+                        await loadCourses(); // refresh available course list
+
+                        showModal(`Re-assign Course for ${traineeName}`, "Select a new course to assign.", async () => {
+                            const selectedCourseId = document.getElementById("reassignCourse").value;
+                            if (!selectedCourseId) return alert("⚠️ Please select a course.");
+
+                            confirmBtn.disabled = true;
+                            confirmBtn.textContent = "Updating...";
+
+                            try {
+                                const updateRes = await fetch(`http://localhost:3000/api/assigned/${traineeId}`, {
+                                    method: "PUT",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({
+                                        courseId: selectedCourseId,
+                                        status: "Not Started",
+                                        progress: "0%"
+                                    })
+                                });
+
+                                if (!updateRes.ok) throw new Error("Failed to update course");
+
+                                alert("✅ Course reassigned successfully!");
+                                loadAssignedTrainees();
+                            } catch (err) {
+                                alert("❌ Error reassigning course.");
+                                console.error(err);
+                            } finally {
+                                confirmBtn.disabled = false;
+                                confirmBtn.textContent = "Confirm";
+                            }
+                        });
+                    }
+                });
+
+                // Add trainee button
+                document.getElementById("addTraineeBtn").addEventListener("click", () => {
+                    window.location.href = "SMEaddTrainee.html";
+                });
+
+                // Initial data load
+                loadAssignedTrainees();
+            });
+        </script>
+</body>
+</html>

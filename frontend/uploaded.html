@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp</title>
+    <link rel="stylesheet" href="dashboard.css" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="SMEtestcreate.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+  <body>
+      <!-- Sidebar -->
+      <aside class="sidebar">
+          <div class="sidebar-header">
+              <img src="logo.png" alt="logo" />
+              <h2>Training</h2>
+          </div>
+          <ul class="sidebar-links">
+              <h4>
+                  <span>Main Menu</span>
+                  <div class="menu-separator"></div>
+              </h4>
+              <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+              <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+              <li><a href="SMEnotifications.html"><span class="material-symbols-outlined">notifications_active</span>Notifications</a></li>
+
+              <h4>
+                  <span><b>Training Materials</b></span>
+                  <div class="menu-separator"></div>
+              </h4>
+              <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+              <li><a href="SMEassessment.html" class="active"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+              <h4>
+                  <span>Account</span>
+                  <div class="menu-separator"></div>
+              </h4>
+              <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+              <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+          </ul>
+
+          <div class="user-account">
+              <div class="user-profile">
+                  <img src="profile.png" alt="Profile Image" />
+                  <div class="user-detail">
+                      <h3>Eva Murphy</h3>
+                      <span>SME</span>
+                  </div>
+              </div>
+          </div>
+      </aside>
+
+      <div class="main">
+          <!-- Header Row -->
+          <div class="header-row">
+              <h1>Uploaded</h1>
+          </div>
+
+          <table id="answered-table">
+              <thead>
+                  <tr>
+                      <th>Trainee ID</th>
+                      <th>Status</th>
+                      <th>Duration (Minutes)</th>
+                      <th>Graded</th>
+                      <th>Actions</th>
+                  </tr>
+              </thead>
+              <tbody id="answered-body">
+                  <!-- Dynamic content for answered table goes here -->
+              </tbody>
+          </table>
+
+          <script>
+        // Data for answered assessments
+        const answeredData = [
+          { traineeId: 'T001', status: 'Completed', duration: '45:30', graded: 'Yes' },
+          { traineeId: 'T002', status: 'Not Started', duration: '--:--', graded: 'No' },
+          { traineeId: 'T003', status: 'Completed', duration: '60:00', graded: 'Yes' },
+          { traineeId: 'T004', status: 'Not Started', duration: '--:--', graded: 'No' },
+          { traineeId: 'T005', status: 'Completed', duration: '30:15', graded: 'Yes' }
+        ];
+
+        const answeredBody = document.getElementById('answered-body');
+
+        // Render the answered table
+        function renderAnsweredTable(data) {
+          answeredBody.innerHTML = '';
+          data.forEach(item => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+              <td>${item.traineeId}</td>
+              <td>${item.status}</td>
+              <td>${item.duration}</td>
+              <td>${item.graded}</td>
+              <td>
+                ${item.status === 'Completed' ?
+                  `<input type="button" value="View" class="view-button" onclick="viewAssessment('${item.traineeId}')" />` :
+                  ''}
+              </td>
+            `;
+            answeredBody.appendChild(row);
+          });
+        }
+
+        // Function for viewing an assessment
+        function viewAssessment(traineeId) {
+          // Redirect to codechecker.html with the traineeId as a query parameter
+          window.location.href = `codechecker.html?traineeId=${traineeId}`;
+        }
+
+        // Initialize rendering
+        renderAnsweredTable(answeredData);
+          </script>
+      </div>
+  </body>
+</html>

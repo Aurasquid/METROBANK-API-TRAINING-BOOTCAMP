@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Create New Course</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="newUploadStyles.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>SME</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+            <h4><span><b>Training Materials</b></span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+        <section class="course-form-section">
+            <div class="panel-header-row">
+                <button type="button" class="btn-box back-icon-btn" onclick="window.history.back()">
+                    <i class="material-icons">arrow_back</i>
+                </button>
+                <h2 class="form-title">Create New Course</h2> <!-- new course LABEL -->
+            </div>
+            <form id="courseForm" class="course-form" enctype="multipart/form-data">
+
+                <label for="courseTitle">Course Title</label> <!-- TITLE -->
+                <input type="text" name="courseTitle" id="courseTitle" placeholder="Enter Title" required />
+
+                <label for="courseDesc">Description</label> <!-- DESC -->
+                <textarea name="courseDesc" id="courseDesc" placeholder="Add any details for context, keywords, or instructions..." required></textarea>
+
+                <label for="courseImage">Upload Image</label>   <!-- IMG -->
+                <div class="image-upload-wrapper">
+                    <input type="file" id="courseImage" name="courseImage" accept="image/*" onchange="previewCourseImage(event)" />
+                    <img id="preview" class="uploaded-preview" />
+                </div>
+                <div class="attachment-info">
+                    Supported: png, jpeg, jpg formats
+                </div>
+
+                <button type="submit" class="save-btn">Save Course</button>
+            </form>
+        </section>
+    </div>
+    <script>
+        async function previewCourseImage(event) {
+            const input = event.target;
+            const preview = document.getElementById("preview");
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.src = "";
+                preview.style.display = "none";
+            }
+        }
+
+        document.getElementById("courseForm").addEventListener("submit", async e => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append("courseTitle", document.getElementById("courseTitle").value);
+            formData.append("courseDesc", document.getElementById("courseDesc").value);
+
+            const userID = localStorage.getItem("userId") || "S1234"; // fallback for testing
+            formData.append("userID", userID);
+
+            const fileInput = document.getElementById("courseImage");
+            if (fileInput.files.length > 0) {
+                formData.append("courseImage", fileInput.files[0]);
+            }
+
+            try {
+                const res = await fetch("http://localhost:3000/api/courses", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (!res.ok) throw new Error("❌ Course creation failed.");
+
+                const data = await res.json();
+
+                alert(`✅ ${data.message}`);
+                console.log("Created course:", data.course);
+
+                e.target.reset();
+                document.getElementById("preview").style.display = "none";
+
+            } catch (err) {
+                console.error(err);
+                alert("⚠️ Error creating course. Check console for details.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Compiler </title>
+
+        <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="codechecker.css" />
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>Trainee</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="TRAINEEdashboards.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="TRAINEEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+
+            <h4><span>Progress</span><div class="menu-separator"></div></h4>
+            <li><a href="TRAINEEprogress.html"><span class="material-symbols-outlined">trending_up</span>Progress</a></li>
+            <li><a href="TRAINEEachievements.html"><span class="material-symbols-outlined">workspace_premium</span>Achievements</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="TRAINEEsettings.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Log Out</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3>Jordan Smith</h3>
+                    <span>Learner</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Compiler Content -->
+
+    <div class="main">
+        <div class="main-content-card">
+            <h1>Compiler</h1>
+
+            <div class="compiler-header">
+                <button class="reset" onclick="resetCode()">⟳ Reset</button>
+                <button class="compile" onclick="compileCode()">⚙ Compile</button>
+                <button class="run" onclick="runCode()">▶ Run</button>
+                <button class="stop" onclick="stopCode()">⏹ Stop</button>
+            </div>
+
+            <div class="compiler-layout">
+                <!-- Code Editor -->
+                <div class="code-editor">
+                    <h3>Code Editor</h3>
+                    <textarea id="code" placeholder="// Write your code here..."></textarea>
+                </div>
+
+                <div class="bottom-panels">
+                    <!-- Output -->
+                    <div class="output-section">
+                        <h3>Output</h3>
+                        <pre id="output">Click Run to see the output...</pre>
+                    </div>
+
+                    <!-- AI Chat -->
+                    <div class="ai-helper-panel">
+                        <div class="ai-chat-container">
+                            <div class="ai-messages" id="aiMessages">
+                                <div class="ai-message bot">
+                                    <strong>🤖 AI:</strong> How can I assist you with your assessment creation today?
+                                </div>
+                            </div>
+                            <div class="ai-input">
+                                <input type="text" id="aiPrompt" placeholder="Type your prompt here...">
+                                <button class="ai-sendbutton" id="sendButton">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const codeEl = document.getElementById("code");
+            const outputEl = document.getElementById("output");
+            const aiMessages = document.getElementById("aiMessages");
+            const aiInput = document.getElementById("aiPrompt");
+            const sendButton = document.getElementById("sendButton");
+
+            if (!codeEl || !outputEl) {
+                console.error("Missing #code or #output element.");
+                return;
+            }
+
+            let isRunning = false;
+            let outputInterval = null;
+
+            function compileCode() {
+                const code = (codeEl.value || "").trim();
+                if (!code) {
+                    outputEl.textContent = "⚠ Nothing to compile.";
+                    return;
+                }
+                outputEl.textContent = "Compiling...\n";
+                setTimeout(() => {
+                    outputEl.textContent += "✅ Compilation successful.\nReady to run.";
+                    outputEl.scrollTop = outputEl.scrollHeight;
+                }, 800);
+            }
+
+            function runCode() {
+                const code = (codeEl.value || "").trim();
+                if (!code) {
+                    outputEl.textContent = "⚠ No code to run.";
+                    outputEl.scrollTop = outputEl.scrollHeight;
+                    return;
+                }
+
+                if (isRunning) {
+                    outputEl.textContent += "\n⚙ Program is already running...";
+                    outputEl.scrollTop = outputEl.scrollHeight;
+                    return;
+                }
+
+                isRunning = true;
+                outputEl.textContent = "▶ Running program...\n";
+                let counter = 0;
+
+                outputInterval = setInterval(() => {
+                    if (!isRunning) return;
+                    counter++;
+                    outputEl.textContent += `Line ${counter}: Executing...\n`;
+                    outputEl.scrollTop = outputEl.scrollHeight;
+
+                    if (counter === 5) {
+                        clearInterval(outputInterval);
+                        outputInterval = null;
+                        outputEl.textContent += "\n✅ Program finished successfully.";
+                        isRunning = false;
+                    }
+                }, 700);
+            }
+
+            function stopCode() {
+                if (isRunning) {
+                    clearInterval(outputInterval);
+                    outputInterval = null;
+                    outputEl.textContent += "\n⏹ Program stopped manually.";
+                    isRunning = false;
+                } else {
+                    outputEl.textContent += "\n⚠ No program is running.";
+                }
+                outputEl.scrollTop = outputEl.scrollHeight;
+            }
+
+            function resetCode() {
+                codeEl.value = "";
+                outputEl.textContent = "Click Run to see the output";
+                isRunning = false;
+                if (outputInterval) {
+                    clearInterval(outputInterval);
+                    outputInterval = null;
+                }
+            }
+
+            window.compileCode = compileCode;
+            window.runCode = runCode;
+            window.stopCode = stopCode;
+            window.resetCode = resetCode;
+
+            function escapeHtml(str) {
+                return str.replace(/[&<>"']/g, m => ({
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#039;"
+                }[m]));
+            }
+
+            async function askAI() {
+                if (!aiInput || !aiMessages) return;
+                const prompt = (aiInput.value || "").trim();
+                const outputText = (outputEl.textContent || "").trim();
+                if (!prompt) return;
+
+                const userMsg = document.createElement("div");
+                userMsg.className = "ai-message user";
+                userMsg.innerHTML = `<strong>🧑 You:</strong> ${escapeHtml(prompt)}`;
+                aiMessages.appendChild(userMsg);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+                aiInput.value = "";
+
+                const aiMsg = document.createElement("div");
+                aiMsg.className = "ai-message bot";
+                aiMsg.textContent = "🤖 Thinking...";
+                aiMessages.appendChild(aiMsg);
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+
+                const backendUrl = "http://localhost:3000/ask";
+                try {
+                    const res = await fetch(backendUrl, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ prompt, output: outputText }),
+                    });
+                    const data = await res.json();
+                    aiMsg.textContent = `🤖 ${data.reply || data.error || "No response."}`;
+                } catch {
+                    aiMsg.textContent = "🤖 Error: could not connect to AI server.";
+                }
+                aiMessages.scrollTop = aiMessages.scrollHeight;
+            }
+
+            if (sendButton) sendButton.addEventListener("click", askAI);
+            if (aiInput) aiInput.addEventListener("keydown", e => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    askAI();
+                }
+            });
+
+            console.log("Client script initialized.");
+        });
+    </script>
+
+
+</body>
+</html>

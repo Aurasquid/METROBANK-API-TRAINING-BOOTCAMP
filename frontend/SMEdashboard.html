@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Metrobank Training Bootcamp - Dashboard</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="basedashboard.css" />
+    <link rel="stylesheet" href="SMEdashboard.css" />
+
+    <!-- Icons & Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="logo.png" alt="logo" />
+            <h2>SME</h2>
+        </div>
+        <ul class="sidebar-links">
+            <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+            <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+            <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+            <h4><span><b>Training Materials</b></span><div class="menu-separator"></div></h4>
+            <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+            <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+            <h4><span>Account</span><div class="menu-separator"></div></h4>
+            <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+            <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+        </ul>
+
+        <div class="user-account">
+            <div class="user-profile">
+                <img id="profileImage" src="profile.png" alt="Profile Image" />
+                <div class="user-detail">
+                    <h3 id="userName">Loading...</h3>
+                    <span id="userRole">Role</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <div class="main">
+        <!-- Top bar -->
+        <header class="top-header">
+            <div class="header-title">Dashboard</div>
+            <form class="header-search" action="#" autocomplete="off">
+                <input type="search" placeholder="Search courses..." name="search" />
+                <span class="material-symbols-outlined search-icon">search</span>
+            </form>
+
+            <div class="header-right">
+                <div class="header-profile">
+                    <button class="profile-btn" id="profileBtn" aria-haspopup="true" type="button">
+                        <img src="profile.png" alt="Profile Image" />
+                        <span id="headerUserName">Eva Murphy</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+
+                    <div class="profile-menu" id="profileMenu">
+                        <ul>
+                            <li><a href="#">View Profile</a></li>
+                            <li><a href="#">Settings</a></li>
+                            <li><a href="#">Help</a></li>
+                            <li><a href="mainlayout.html">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- SME Dashboard Content -->
+        <section class="dashboard-row">
+            <div class="panel dashboard-panel">
+                <div class="button-row">
+                    <button class="action-button" id="newCourseBtn">
+                        <span class="material-symbols-outlined button-icon">upload_file</span>
+                        <span class="button-text">New Course</span>
+                    </button>
+
+                    <button class="action-button" id="newLessonBtn">
+                        <span class="material-symbols-outlined button-icon">upload_file</span>
+                        <span class="button-text">New Lesson</span>
+                    </button>
+
+                    <button class="action-button" id="createAssessBtn">
+                        <span class="material-symbols-outlined button-icon">add</span>
+                        <span class="button-text">Create Assessment</span>
+                    </button>
+
+                    <button class="action-button" id="uploadContentBtn">
+                        <span class="material-symbols-outlined button-icon">note_add</span>
+                        <span class="button-text">Upload Content</span>
+                    </button>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Presentation Templates Section -->
+        <section class="dashboard-row">
+            <h1 class="section-title">Presentation Templates</h1>
+
+            <div class="courses-carousel">
+                <!-- Left scroll button -->
+                <button class="carousel-btn" id="prevTemplates">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </button>
+
+                <!-- Scrollable slider -->
+                <div class="carousel-track" id="templatesTrack">
+                    <div class="course-card">
+                        <img src="blanktemp.png" alt="Blank template" class="course-img" />
+                        <div class="card-body">
+                            <h4 class="course-title">Blank Template</h4>
+                            <p class="course-desc">
+                                Start from scratch and customize every slide for a unique, clean look.
+                            </p>
+                            <button class="template-use-btn">
+                                <span class="material-symbols-outlined">touch_app</span> Use Template
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Add more template cards below -->
+                    <div class="course-card">
+                        <img src="temp2.png" alt="Modern Template" class="course-img" />
+                        <div class="card-body">
+                            <h4 class="course-title">Modern Template</h4>
+                            <p class="course-desc">Professional design for sleek corporate presentations.</p>
+                            <button class="template-use-btn">
+                                <span class="material-symbols-outlined">touch_app</span> Use Template
+                            </button>
+                        </div>
+                    </div>
+            </div>
+                <!-- Right scroll button -->
+                <button class="carousel-btn" id="nextTemplates">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- Courses Section -->
+        <section class="dashboard-row">
+            <h1 class="section-title">Courses</h1>
+
+            <div class="template-slider-wrapper">
+                <input type="checkbox" id="toggle-courses" class="template-toggle-cards" />
+
+                <div class="template-slider-container" id="coursesContainer">
+                    <!-- Dynamic course cards will load here -->
+                </div>
+
+                <div class="template-toggle-wrapper">
+                    <label for="toggle-courses" class="template-show-more-btn">Show More</label>
+                    <label for="toggle-courses" class="template-show-less-btn">Show Less</label>
+                </div>
+            </div>
+        </section>
+        <script>
+            async function loadCourses() {
+                try {
+                    const res = await fetch("http://localhost:3000/api/courses");
+                    const courses = await res.json();
+
+                    const lessonsRes = await fetch("http://localhost:3000/api/lessons");
+                    const lessons = await lessonsRes.json();
+
+                    const assessmentsRes = await fetch("http://localhost:3000/api/assessments");
+                    const assessments = await assessmentsRes.json();
+
+                    const container = document.getElementById("coursesContainer");
+                    container.innerHTML = "";
+
+                    courses.forEach(course => {
+                        const courseLessons = lessons.filter(l => l.courseId === course.id);
+                        const courseAssessments = assessments.filter(a => a.courseId === course.id);
+
+                        const card = `
+                                        <div class="template-card professional-card">
+                                          <div class="template-image-wrapper">
+                                            <img src="${course.image ? `http://localhost:3000${course.image}` : 'course.jpeg'}" alt="${course.title}" />
+                                            <div class="template-badge">${course.category || 'General'}</div>
+                                          </div>
+
+                                          <div class="template-card-content">
+                                            <h4>${course.title}</h4>
+                                            <p>${course.description || 'No description available.'}</p>
+
+                                            <div class="template-meta">
+                                              <span>${courseLessons.length} Lessons</span>
+                                              <span>${courseAssessments.length} Assessments</span>
+                                            </div>
+
+                                            <button class="template-use-btn" onclick="viewCourse(${course.id})">
+                                              <span class="material-symbols-outlined">school</span> View Course
+                                            </button>
+                                          </div>
+                                        </div>
+                                      `;
+                        container.innerHTML += card;
+                    });
+                } catch (err) {
+                    console.error("Error loading courses:", err);
+                }
+            }
+
+            function viewCourse(courseId) {
+                window.location.href = `intro-courseSME.html?courseId=${courseId}`;
+            }
+            window.onload = loadCourses;
+
+            // --- REDIRECT BUTTONS ---
+            document.getElementById("newCourseBtn").addEventListener("click", () => {
+                window.location.href = "SMEnewCourse.html";
+            });
+            document.getElementById("newLessonBtn").addEventListener("click", () => {
+                window.location.href = "SMEnewLesson.html";
+            });
+            document.getElementById("createAssessBtn").addEventListener("click", () => {
+                window.location.href = "SMEcreateassess.html";
+            });
+            document.getElementById("uploadContentBtn").addEventListener("click", () => {
+                window.location.href = "SMEuploadcontent.html";
+            });
+        </script>
+</body>
+</html>

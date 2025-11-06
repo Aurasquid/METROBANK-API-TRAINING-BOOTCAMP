@@ -1,0 +1,56 @@
+﻿<aside class="sidebar">
+    <div class="sidebar-header">
+        <img src="logo.png" alt="logo" />
+        <h2>SME</h2>
+    </div>
+
+    <ul class="sidebar-links">
+        <h4><span>Main Menu</span><div class="menu-separator"></div></h4>
+        <li><a href="SMEdashboard.html"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+        <li><a href="SMEtrainees.html"><span class="material-symbols-outlined">groups</span>Trainees</a></li>
+
+        <h4><span>Training Materials</span><div class="menu-separator"></div></h4>
+        <li><a href="SMEcourses.html"><span class="material-symbols-outlined">school</span>Courses</a></li>
+        <li><a href="SMEassessment.html"><span class="material-symbols-outlined">quiz</span>Assessments</a></li>
+
+        <h4><span>Account</span><div class="menu-separator"></div></h4>
+        <li><a href="settingsSME.html"><span class="material-symbols-outlined">settings</span>Settings</a></li>
+        <li><a href="mainlayout.html"><span class="material-symbols-outlined">logout</span>Logout</a></li>
+    </ul>
+
+    <div class="user-account">
+        <div class="user-profile">
+            <img id="profileImage" src="profile.png" alt="Profile Image" />
+            <div class="user-detail">
+                <h3 id="userName">Loading...</h3>
+                <span id="userRole">Role</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<header class="top-header">
+    <div class="header-title">Dashboard</div>
+
+    <form class="header-search" action="#" autocomplete="off">
+        <input type="search" placeholder="Search..." name="search" />
+        <span class="material-symbols-outlined search-icon">search</span>
+    </form>
+
+    <div class="header-profile">
+        <button class="profile-btn" id="profileBtn">
+            <img id="headerProfileImage" src="profile.png" alt="Profile" />
+            <span class="profile-name" id="headerProfileName">Loading...</span>
+            <span class="material-symbols-outlined">expand_more</span>
+        </button>
+
+        <div class="profile-menu" id="profileMenu">
+            <ul>
+                <li><a href="profile.html">View Profile</a></li>
+                <li><a href="settings.html">Settings</a></li>
+                <li><a href="#">Help</a></li>
+                <li><a href="#" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
